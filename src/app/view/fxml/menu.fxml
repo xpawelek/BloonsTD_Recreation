@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="app.controller.MenuController" spacing="10" alignment="CENTER">
+    <Label fx:id="titleLabel" text="Bloons TD Recreation" style="-fx-font-size: 24px;"/>
+    <Button text="Start Game" onAction="#startGame"/>
+    <Button text="Settings" onAction="#openSettings"/>
+    <Button text="Exit" onAction="#exitGame"/>
+</VBox>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.ImageView?>
+
+<GridPane fx:id="gridPane" xmlns:fx="http://javafx.com/fxml" fx:controller="app.controller.GameController">
+    <columnConstraints>
+        <ColumnConstraints percentWidth="70" hgrow="ALWAYS"/>
+        <ColumnConstraints percentWidth="30" hgrow="ALWAYS"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints percentHeight="100" vgrow="ALWAYS"/>
+    </rowConstraints>
+
+    <AnchorPane GridPane.columnIndex="0">
+        <ImageView fx:id="backgroundGameImage" preserveRatio="true"/>
+    </AnchorPane>
+    <VBox GridPane.columnIndex="1" spacing="10" alignment="CENTER">
+        <Label text="Game Scene" style="-fx-text-fill: white;"/>
+        <Button text="Go back" onAction="#goBack"/>
+    </VBox>
+</GridPane>
