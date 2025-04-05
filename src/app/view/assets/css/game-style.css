@@ -1,0 +1,54 @@
+@font-face {
+    font-family: 'Orbitron';
+    src: url('/app/view/assets/fonts/Orbitron.ttf');
+}
+
+.start-button-game {
+    -fx-font-family: 'Orbitron';
+    -fx-text-fill: white;
+    -fx-font-size: 30px;
+    -fx-background-color: transparent;
+    -fx-font-weight: bold;
+}
+
+.game-grid-pane{
+
+}
+
+.side-game-panel {
+    -fx-background-color: rgba(10, 10, 10, 0.25);
+    -fx-text-fill: white;
+    -fx-font-size: 20px;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1;
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.1), 10, 0.5, 0, 0);
+    -fx-padding: 10 20;
+    -fx-font-family: 'Orbitron';
+    -fx-cursor: hand;
+}
+
+.panel-container Label {
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+}
+
+.panel-container #startRoundButton
+{
+    -fx-text-fill: white;
+    -fx-border-color: white;
+    -fx-background-color: rgb(144, 238, 144);
+    -fx-padding: 10 20;
+    -fx-font-weight: bold;
+    -fx-translate-x: 15;
+}
+
+.panel-container #restartGameButton
+{
+    -fx-text-fill: red;
+    -fx-background-color: transparent;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-translate-x: 15;
+}

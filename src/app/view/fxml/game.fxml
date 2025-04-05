@@ -3,6 +3,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.image.ImageView?>
 
+<?import javafx.geometry.Insets?>
 <GridPane fx:id="gridPane" xmlns:fx="http://javafx.com/fxml" fx:controller="app.controller.GameController">
     <columnConstraints>
         <ColumnConstraints percentWidth="70" hgrow="ALWAYS"/>
@@ -13,10 +14,35 @@
     </rowConstraints>
 
     <AnchorPane GridPane.columnIndex="0">
-        <ImageView fx:id="backgroundGameImage" preserveRatio="true"/>
+        <ImageView fx:id="backgroundGameImage" preserveRatio="false"/>
     </AnchorPane>
-    <VBox GridPane.columnIndex="1" spacing="10" alignment="CENTER">
-        <Label text="Game Scene" style="-fx-text-fill: white;"/>
-        <Button text="Go back" onAction="#goBack"/>
+    <VBox fx:id="sideGamePanel" GridPane.columnIndex="1" spacing="10" alignment="CENTER" >
+        <GridPane.margin>
+            <Insets top="2" bottom="2" left="2" right="5"/>
+        </GridPane.margin>
+        <GridPane fx:id="panelContainer">
+            <columnConstraints>
+                <ColumnConstraints halignment="CENTER"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints percentHeight="10" vgrow="NEVER"></RowConstraints>
+                <RowConstraints percentHeight="10" vgrow="NEVER"></RowConstraints>
+                <RowConstraints percentHeight="10" vgrow="NEVER"></RowConstraints>
+                <RowConstraints percentHeight="5" vgrow="ALWAYS"></RowConstraints>
+                <RowConstraints percentHeight="10" vgrow="ALWAYS"></RowConstraints>
+                <RowConstraints percentHeight="40" vgrow="ALWAYS"></RowConstraints>
+                <RowConstraints percentHeight="10" vgrow="ALWAYS"></RowConstraints>
+                <RowConstraints percentHeight="5" vgrow="ALWAYS"></RowConstraints>
+            </rowConstraints>
+            <Label text="Round : 1" GridPane.rowIndex="0"/>
+            <Label text="Money : 650" GridPane.rowIndex="1"/>
+            <Label text="Lives : 40" GridPane.rowIndex="2"/>
+            <Label text="Defense Towers" GridPane.rowIndex="4"/>
+            <GridPane GridPane.rowIndex="5">
+
+            </GridPane>
+            <Button text="Start Round!" fx:id="startRoundButton" GridPane.rowIndex="6" onAction="#goBack"/>
+            <Button text="Restart Game" fx:id="restartGameButton" GridPane.rowIndex="7"/>
+        </GridPane>
     </VBox>
 </GridPane>
