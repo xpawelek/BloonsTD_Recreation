@@ -9,5 +9,5 @@
         <RowConstraints percentHeight="33" vgrow="ALWAYS"></RowConstraints>
         <RowConstraints percentHeight="33" vgrow="ALWAYS"></RowConstraints>
     </rowConstraints>
-    <Button text="Play A Game!" onAction="#startGame" fx:id="startGameButton" GridPane.rowIndex="2" />
+    <Button text="Play  A  Game!" onAction="#startGame" fx:id="startGameButton" GridPane.rowIndex="2" />
 </GridPane>

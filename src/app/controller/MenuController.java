@@ -39,7 +39,7 @@ public class MenuController {
 
     @FXML
     private void startGame() throws IOException{
-        System.out.println("Start Game button clicked!");
+
         Main.switchScene("/app/view/fxml/game.fxml");
     }
 

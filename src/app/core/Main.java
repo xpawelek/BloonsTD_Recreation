@@ -1,5 +1,7 @@
 package app.core;
 
+import app.controller.GameController;
+import app.model.GameLoop;
 import app.utils.AppConstans;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +12,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Main extends Application {
-    private static Stage primaryStage;
+    private static Stage primaryStage;;
 
     @Override
     public void start(Stage stage) throws Exception {
