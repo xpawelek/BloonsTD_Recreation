@@ -6,8 +6,11 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.PauseTransition;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+
 public class GameLoop extends AnimationTimer {
     private final GameController gameController;
+    private ArrayList<Ballon> ballons = new ArrayList<>();
 
     public GameLoop(GameController gameController) {
         this.gameController = gameController;
@@ -29,6 +32,19 @@ public class GameLoop extends AnimationTimer {
                 //tutaj kolejne fale
                 System.out.println("game continues");
                 gameController.setStartRoundButtonDisabled();
+                if(ballons.size() < 1) {
+                    Ballon balloon = new Ballon(5);
+                    gameController.addElementOnGridPane(balloon);
+                    ballons.add(balloon);
+                    balloon.followPath();
+
+                    PauseTransition pause = new PauseTransition(Duration.seconds(2));
+                    pause.setOnFinished(event -> {
+                        balloon.updateBallonLives();
+                    });
+                    pause.play();
+                    //update lives, check if 0, if then remove
+                }
             }
             if(!AppConstans.gameState.getRoundContinues())
             {

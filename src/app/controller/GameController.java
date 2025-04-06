@@ -56,9 +56,11 @@ public class GameController {
     {
         System.out.println("!");
         //testowy
-        Ballon balloon = new Ballon(1, 5, new ImageView("/app/view/assets/images/ballon.png"));
+        /*
+        Ballon balloon = new Ballon(5);
         gridPane.getChildren().add(balloon.getImageView());
         balloon.followPath();
+         */
         AppConstans.gameState.setRoundContinues();
     }
 
@@ -93,5 +95,15 @@ public class GameController {
     public void setStartRoundButtonEnabled()
     {
         startRoundButton.setDisable(false);
+    }
+
+    public void addElementOnGridPane(Ballon ballon)
+    {
+        gridPane.getChildren().add(ballon.getImageView());
+    }
+
+    public void updateImageViewOfBallon(Ballon ballon)
+    {
+
     }
 }

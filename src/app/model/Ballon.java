@@ -10,24 +10,57 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Ballon {
     private int starting_x;
     private int starting_y;
     private int ballon_lives;
     private int ballon_speed;
     private ImageView ballon_img;
+    private String ballons_path =  "/app/view/assets/images/";
+    private List<String> ballon_img_list = List.of(
+            ballons_path + "red_ballon.png",
+            ballons_path + "red_ballon.png",
+            ballons_path + "blue_ballon.png",
+            ballons_path + "green_ballon.png",
+            ballons_path + "yellow_ballon.png",
+            ballons_path + "white_ballon.png",
+            ballons_path + "black_ballon.png"
+    );
 
-    public Ballon(int ballon_lives, int ballon_speed, ImageView ballon_img) {
+    public Ballon() {}
+    public Ballon(int ballon_lives) {
         this.ballon_lives = ballon_lives;
-        this.ballon_speed = ballon_speed;
-        this.ballon_img = ballon_img;
-        this.ballon_img.setFitHeight(30);
-        this.ballon_img.setFitWidth(30);
+        this.ballon_speed = 10;
+        this.ballon_img = new ImageView(ballon_img_list.get(ballon_lives));
+        //this.ballon_img.setFitHeight(30);
+        //this.ballon_img.setFitWidth(30);
     }
-
 
     public ImageView getImageView() {
         return ballon_img;
+    }
+
+    public void updateImage(String imagePath) {
+        ballon_img.setImage(new Image(imagePath));
+    }
+
+    public void updateBallonLives()
+    {
+        ballon_lives--;
+        if(ballon_lives <= 0)
+        {
+            Ballon obj = new Ballon();
+            obj = null;
+            return;
+        }
+
+        updateImage(ballon_img_list.get(ballon_lives));
+        //speed hash map?
+        ballon_speed -= (int)(Math.random() * 2);
     }
 
     public void followPath() {
@@ -57,7 +90,7 @@ public class Ballon {
         PathTransition pathTransition = new PathTransition();
         pathTransition.setNode(getImageView());
         pathTransition.setPath(path);
-        pathTransition.setDuration(Duration.seconds(5));
+        pathTransition.setDuration(Duration.seconds(ballon_speed));
         pathTransition.setCycleCount(Timeline.INDEFINITE); //1
         pathTransition.play();
     }
