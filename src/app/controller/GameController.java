@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.model.Ballon;
 import app.model.GameLoop;
 import app.utils.AppConstans;
 import javafx.animation.PauseTransition;
@@ -54,6 +55,10 @@ public class GameController {
     public void startRound() throws IOException
     {
         System.out.println("!");
+        //testowy
+        Ballon balloon = new Ballon(1, 5, new ImageView("/app/view/assets/images/ballon.png"));
+        gridPane.getChildren().add(balloon.getImageView());
+        balloon.followPath();
         AppConstans.gameState.setRoundContinues();
     }
 

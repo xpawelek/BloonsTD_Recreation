@@ -72,4 +72,6 @@ public class GameState {
         gameContinues = false;
         roundContinues = false;
     }
+
+    //store info about items and about where there are placed etc
 }
