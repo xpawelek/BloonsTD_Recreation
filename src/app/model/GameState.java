@@ -8,6 +8,7 @@ public class GameState {
     private int currentWave;
     private boolean gameContinues = false;
     private boolean roundContinues = false;
+    private boolean waveStarted = false;
 
     public GameState()
     {
@@ -45,6 +46,21 @@ public class GameState {
         return roundContinues;
     }
 
+    public void changeWaveStarted()
+    {
+        waveStarted = !waveStarted;
+    }
+
+    public void changeWaveStarted(boolean newValue)
+    {
+        waveStarted = newValue;
+    }
+
+    public boolean getWaveStarted()
+    {
+        return waveStarted;
+    }
+
     public void setRoundContinues()
     {
         roundContinues = !roundContinues;
@@ -55,14 +71,19 @@ public class GameState {
         this.roundContinues = roundContinues;
     }
 
-    public void loseLife()
+    public void loseLife(int lives)
     {
-        lives--;
+        this.lives -= lives;
     }
 
     public void addCoin()
     {
         money++;
+    }
+
+    public void updateCurrentWave()
+    {
+        currentWave++;
     }
 
     public void restartGame(){

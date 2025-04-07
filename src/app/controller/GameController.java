@@ -1,25 +1,21 @@
 package app.controller;
 
-import app.model.Ballon;
+import app.model.Balloon;
 import app.model.GameLoop;
 import app.utils.AppConstans;
 import javafx.animation.PauseTransition;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.geometry.Bounds;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+
 import java.io.IOException;
 import app.core.Main;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 
-import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
 public class GameController {
@@ -62,6 +58,7 @@ public class GameController {
         balloon.followPath();
          */
         AppConstans.gameState.setRoundContinues();
+        AppConstans.gameState.changeWaveStarted();
     }
 
     @FXML
@@ -87,6 +84,7 @@ public class GameController {
         livesLabel.setText(newInfo);
     }
 
+
     public void setStartRoundButtonDisabled()
     {
         startRoundButton.setDisable(true);
@@ -97,13 +95,19 @@ public class GameController {
         startRoundButton.setDisable(false);
     }
 
-    public void addElementOnGridPane(Ballon ballon)
+    public void addElementOnGridPane(Balloon balloon)
     {
-        gridPane.getChildren().add(ballon.getImageView());
+        gridPane.getChildren().add(balloon.getImageView());
     }
 
-    public void updateImageViewOfBallon(Ballon ballon)
+    public void removeElementFromGridPane(Balloon balloon)
     {
+        gridPane.getChildren().remove(balloon.getImageView());
+    }
 
+    public double getPositionY(Balloon balloon)
+    {
+        Bounds bounds = balloon.getImageView().localToScene(balloon.getImageView().getBoundsInLocal());
+        return bounds.getCenterY();
     }
 }
