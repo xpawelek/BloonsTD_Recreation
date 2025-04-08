@@ -21,8 +21,9 @@ public class Balloon {
     public Balloon() {}
     public Balloon(int ballon_lives) {
         this.ballon_lives = ballon_lives;
-        this.ballon_speed = 8;
+        this.ballon_speed = 3;
         this.ballon_img = new ImageView(AppConstans.ballon_img_list.get(ballon_lives));
+        this.ballon_img.setId("balloon");
         //this.ballon_img.setVisible(false); -> migajace balony ogarnac
         //this.ballon_img.setFitHeight(30);
         //this.ballon_img.setFitWidth(30);

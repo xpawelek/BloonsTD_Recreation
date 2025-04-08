@@ -6,6 +6,7 @@ import app.utils.AppConstans;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -97,12 +98,24 @@ public class GameController {
 
     public void addElementOnGridPane(Balloon balloon)
     {
-        gridPane.getChildren().add(balloon.getImageView());
+        //gridPane.getChildren().add(balloon.getImageView());
+        gridPane.add(balloon.getImageView(), 0,0);
+        System.out.println("Dzieci gridPane:");
+        for (Node node : gridPane.getChildren()) {
+            System.out.println("- " + node + ", id: " + node.getId());
+        }
+        //grid pane add with row and column?
+    }
+
+    public GridPane getGridPane()
+    {
+        return gridPane;
     }
 
     public void removeElementFromGridPane(Balloon balloon)
     {
         gridPane.getChildren().remove(balloon.getImageView());
+        //po zmianie image nie wiadomo czy nie inny sposob usuniecia np po id
     }
 
     public double getPositionY(Balloon balloon)

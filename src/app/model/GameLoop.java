@@ -6,6 +6,7 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
+import javafx.scene.Node;
 import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -39,7 +40,9 @@ public class GameLoop extends AnimationTimer {
     public void incomingWave()
     {
         AppConstans.gameState.changeWaveStarted();
-        this.currentMaxBallonsAllowed += (int)(Math.random() * 10) + 1;
+        this.currentMaxBallonsAllowed += (int)(Math.random() * 5) + 1;
+        System.out.println(this.currentMaxBallonsAllowed);
+        System.out.println(this.balloons.size());
 
         if(AppConstans.gameState.getCurrentWave() % 6 == 0)
         {
@@ -49,10 +52,12 @@ public class GameLoop extends AnimationTimer {
             this.currentBallonsAllowed.add(baseBallonPower);
         }
 
+
         for(int i = 0; i < this.currentMaxBallonsAllowed; i++)
         {
             this.balloons.add(new Balloon(baseBallonPower));
         }
+        System.out.println(this.balloons.size());
 
         int delay = 0;
         for(Balloon balloon : balloons)
@@ -127,7 +132,11 @@ public class GameLoop extends AnimationTimer {
 
     public void clearBalloonsAfterWave()
     {
-        System.out.println("removing all balloons");
+        System.out.println("Dzieci gridPane:");
+        for (Node node : gameController.getGridPane().getChildren()) {
+            System.out.println("- " + node + ", id: " + node.getId());
+        }
+
         for(Balloon balloon : balloons)
         {
             gameController.removeElementFromGridPane(balloon);
@@ -136,6 +145,7 @@ public class GameLoop extends AnimationTimer {
         System.out.println("executed clear balloons after wave");
         AppConstans.gameState.setRoundContinues(false);
         this.balloons.clear();
+        this.timeline.getKeyFrames().clear(); // <- musi byc clearoweane
     }
 
     public void clearBalloon(Balloon balloon)
@@ -164,7 +174,7 @@ public class GameLoop extends AnimationTimer {
                     AppConstans.gameState.setGameContinues();
                 }
                 //tutaj kolejne fale
-                System.out.println("game continues");
+                //System.out.println("game continues");
                 gameController.setStartRoundButtonDisabled();
                 if(AppConstans.gameState.getWaveStarted())
                 {
