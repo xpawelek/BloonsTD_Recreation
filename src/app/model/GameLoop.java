@@ -4,14 +4,11 @@ import app.controller.GameController;
 import app.utils.AppConstans;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
-import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.scene.Node;
 import javafx.util.Duration;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+
+import java.util.*;
 
 import static java.lang.Thread.sleep;
 
@@ -19,15 +16,18 @@ import static java.lang.Thread.sleep;
 public class GameLoop extends AnimationTimer {
     private final GameController gameController;
     private ArrayList<Balloon> balloons = new ArrayList<>();
-    private int baseBallonPower = 1;
-    private List<Integer> currentBallonsAllowed = List.of(baseBallonPower);
-    private int currentMaxBallonsAllowed = 5;
-    private Random random = new Random();
-    private Timeline timeline = new Timeline();
-    private int allowableRange = 30;
+    private int baseBalloonPower = 1;
+    private List<Integer> currentBalloonsAllowed = new ArrayList<>(List.of(baseBalloonPower));
+    private List<Integer> ballonsPowerProbability = new ArrayList<>(Collections.nCopies(AppConstans.ballon_img_list.size() - 1, 0));
+    private int currentMaxBalloonsAllowed = 5;
+    private boolean turnOnProbability = false;
+    private int probabilityIndex = 0;
+    private final Random random = new Random();
+    private final Timeline timeline = new Timeline();
 
     public GameLoop(GameController gameController) {
         this.gameController = gameController;
+        this.ballonsPowerProbability.set(0, 100);
     }
 
     public void updateGameInfo()
@@ -40,29 +40,68 @@ public class GameLoop extends AnimationTimer {
     public void incomingWave()
     {
         AppConstans.gameState.changeWaveStarted();
-        this.currentMaxBallonsAllowed += (int)(Math.random() * 5) + 1;
-        System.out.println(this.currentMaxBallonsAllowed);
-        System.out.println(this.balloons.size());
+        this.currentMaxBalloonsAllowed += (int)(Math.random() * 5) + 1;
 
         if(AppConstans.gameState.getCurrentWave() % 6 == 0)
         {
-            this.currentMaxBallonsAllowed -= (int)(Math.random() * 10) + 5;
-            if(baseBallonPower < AppConstans.ballon_img_list.size())
-                this.baseBallonPower += 1;
-            this.currentBallonsAllowed.add(baseBallonPower);
+            this.turnOnProbability = true;
+            if((this.probabilityIndex < AppConstans.ballon_img_list.size() - 1))
+            {
+                probabilityIndex += 1;
+            }
+
+            this.currentMaxBalloonsAllowed -= (int)(Math.random() * 10) + 5;
+            if(baseBalloonPower < AppConstans.ballon_img_list.size())
+                this.baseBalloonPower += 1;
+
+            this.currentBalloonsAllowed.add(baseBalloonPower);
         }
 
-
-        for(int i = 0; i < this.currentMaxBallonsAllowed; i++)
+        for(int i = 0; i < this.ballonsPowerProbability.size(); i++)
         {
-            this.balloons.add(new Balloon(baseBallonPower));
+            System.out.println(this.ballonsPowerProbability.get(i));
+        }
+
+        int rand_num = (int)(Math.random() * 50) + 1;
+
+        //losujemy dodatkowo możliwosc ze pojawia sie od 1 do 3 balonow z kazdego mozliwego lvl
+        if(rand_num == (int)(Math.random() * 50) + 1)
+        {
+            for(int i = 0; i < (int)(Math.random() * 8) + 1; i++)
+            {
+                //nie puszczamy najmocniejszych i pierwszego (to bedzie img - koniec)
+                this.balloons.add(new Balloon((int)(Math.random() * AppConstans.ballon_img_list.size() - 3) + 1));
+            }
+        }
+
+        //dokonczyc
+        if(turnOnProbability)
+        {
+            System.out.println(this.probabilityIndex);
+            if(this.probabilityIndex <= AppConstans.ballon_img_list.size() - 1)
+            {
+                System.out.println("robie sie");
+                int currentProbabilityOfIndex = this.ballonsPowerProbability.get(this.probabilityIndex);
+                this.ballonsPowerProbability.set(probabilityIndex, currentProbabilityOfIndex + 10);
+
+                for(int i = 0; i < this.probabilityIndex; i++)
+                {
+                    this.ballonsPowerProbability.set(i, (100 - this.ballonsPowerProbability.get(probabilityIndex)) / probabilityIndex);
+                }
+            }
+
+        }
+
+        for(int i = 0; i < this.currentMaxBalloonsAllowed; i++)
+        {
+            this.balloons.add(new Balloon(baseBalloonPower));
         }
         System.out.println(this.balloons.size());
 
         int delay = 0;
         for(Balloon balloon : balloons)
         {
-            int randomDelay = 200 + random.nextInt(800);
+            int randomDelay = 50 + random.nextInt(1000);
             delay += randomDelay;
             KeyFrame keyFrame = new KeyFrame(Duration.millis(delay), event -> {
                 balloon.followPath();
@@ -117,7 +156,8 @@ public class GameLoop extends AnimationTimer {
 
     public boolean checkIfBallonReachedFinish(Balloon balloon)
     {
-        if(Math.abs(gameController.getPositionY(balloon)) > AppConstans.SCREEN_HEIGHT + this.allowableRange)
+        int allowableRange = 30;
+        if(Math.abs(gameController.getPositionY(balloon)) > AppConstans.SCREEN_HEIGHT + allowableRange)
         {
             return true;
         }

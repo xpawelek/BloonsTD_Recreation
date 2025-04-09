@@ -73,7 +73,8 @@ public class GameState {
 
     public void loseLife(int lives)
     {
-        this.lives -= lives;
+        //this.lives -= lives;
+        this.lives -= 0;
     }
 
     public void addCoin()
