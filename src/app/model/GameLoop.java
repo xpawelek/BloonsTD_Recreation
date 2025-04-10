@@ -30,6 +30,24 @@ public class GameLoop extends AnimationTimer {
         this.ballonsPowerProbability.set(0, 100);
     }
 
+    public int drawBalloonIndexBasedOnWeight() {
+        int[] availableBalloonsNums = currentBalloonsAllowed.stream().mapToInt(i -> i).toArray();
+        int[] weights = ballonsPowerProbability.stream().mapToInt(i -> i).filter(i -> i > 0).toArray();
+
+        int totalWeight = Arrays.stream(weights).sum();
+        int random_num = random.nextInt(totalWeight);
+
+        int current = 0;
+        for (int i = 0; i < availableBalloonsNums.length; i++) {
+            current += weights[i];
+            if (random_num < current) {
+                return availableBalloonsNums[i];
+            }
+        }
+
+        throw new RuntimeException("Something went wrong!");
+    }
+
     public void updateGameInfo()
     {
         gameController.updateRoundLabel("Current Wave : " + AppConstans.gameState.getCurrentWave());
@@ -37,15 +55,12 @@ public class GameLoop extends AnimationTimer {
         gameController.updateLivesLabel("Lives : " + AppConstans.gameState.getLives());
     }
 
-    public void incomingWave()
+    private void checkIfJump()
     {
-        AppConstans.gameState.changeWaveStarted();
-        this.currentMaxBalloonsAllowed += (int)(Math.random() * 5) + 1;
-
         if(AppConstans.gameState.getCurrentWave() % 6 == 0)
         {
             this.turnOnProbability = true;
-            if((this.probabilityIndex < AppConstans.ballon_img_list.size() - 1))
+            if((this.probabilityIndex < this.ballonsPowerProbability.size() - 1))
             {
                 probabilityIndex += 1;
             }
@@ -56,12 +71,10 @@ public class GameLoop extends AnimationTimer {
 
             this.currentBalloonsAllowed.add(baseBalloonPower);
         }
+    }
 
-        for(int i = 0; i < this.ballonsPowerProbability.size(); i++)
-        {
-            System.out.println(this.ballonsPowerProbability.get(i));
-        }
-
+    private void addRandomAdditionalBallons()
+    {
         int rand_num = (int)(Math.random() * 50) + 1;
 
         //losujemy dodatkowo możliwosc ze pojawia sie od 1 do 3 balonow z kazdego mozliwego lvl
@@ -73,14 +86,14 @@ public class GameLoop extends AnimationTimer {
                 this.balloons.add(new Balloon((int)(Math.random() * AppConstans.ballon_img_list.size() - 3) + 1));
             }
         }
+    }
 
-        //dokonczyc
+    private void updateWeights()
+    {
         if(turnOnProbability)
         {
-            System.out.println(this.probabilityIndex);
-            if(this.probabilityIndex <= AppConstans.ballon_img_list.size() - 1)
+            if(this.probabilityIndex <= AppConstans.ballon_img_list.size() - 1 && this.ballonsPowerProbability.get(this.probabilityIndex) < 50)
             {
-                System.out.println("robie sie");
                 int currentProbabilityOfIndex = this.ballonsPowerProbability.get(this.probabilityIndex);
                 this.ballonsPowerProbability.set(probabilityIndex, currentProbabilityOfIndex + 10);
 
@@ -89,14 +102,23 @@ public class GameLoop extends AnimationTimer {
                     this.ballonsPowerProbability.set(i, (100 - this.ballonsPowerProbability.get(probabilityIndex)) / probabilityIndex);
                 }
             }
-
         }
+    }
+
+    public void incomingWave()
+    {
+        AppConstans.gameState.changeWaveStarted();
+        this.currentMaxBalloonsAllowed += (int)(Math.random() * 5) + 1;
+
+        checkIfJump();
+        addRandomAdditionalBallons();
+        updateWeights();
+
 
         for(int i = 0; i < this.currentMaxBalloonsAllowed; i++)
         {
-            this.balloons.add(new Balloon(baseBalloonPower));
+            this.balloons.add(new Balloon(drawBalloonIndexBasedOnWeight()));
         }
-        System.out.println(this.balloons.size());
 
         int delay = 0;
         for(Balloon balloon : balloons)
@@ -172,17 +194,11 @@ public class GameLoop extends AnimationTimer {
 
     public void clearBalloonsAfterWave()
     {
-        System.out.println("Dzieci gridPane:");
-        for (Node node : gameController.getGridPane().getChildren()) {
-            System.out.println("- " + node + ", id: " + node.getId());
-        }
-
         for(Balloon balloon : balloons)
         {
             gameController.removeElementFromGridPane(balloon);
         }
 
-        System.out.println("executed clear balloons after wave");
         AppConstans.gameState.setRoundContinues(false);
         this.balloons.clear();
         this.timeline.getKeyFrames().clear(); // <- musi byc clearoweane

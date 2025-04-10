@@ -11,6 +11,9 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Balloon {
     private int ballon_lives;
     private int ballon_speed;
@@ -21,8 +24,8 @@ public class Balloon {
     public Balloon() {}
     public Balloon(int ballon_lives) {
         this.ballon_lives = ballon_lives;
-        this.ballon_speed = 8;
-        this.ballon_img = new ImageView(AppConstans.ballon_img_list.get(ballon_lives));
+        this.ballon_speed =  new ArrayList<>(AppConstans.ballon_img_list.values()).get(ballon_lives);
+        this.ballon_img = new ImageView(new ArrayList<>(AppConstans.ballon_img_list.keySet()).get(ballon_lives));
         this.ballon_img.setId("balloon");
         //this.ballon_img.setVisible(false); -> migajace balony ogarnac
         //this.ballon_img.setFitHeight(30);
@@ -53,7 +56,7 @@ public class Balloon {
             return;
         }
 
-        updateImage(AppConstans.ballon_img_list.get(ballon_lives));
+        updateImage(new ArrayList<>(AppConstans.ballon_img_list.keySet()).get(ballon_lives));
         //speed hash map?
         ballon_speed -= (int)(Math.random() * 2);
     }
@@ -80,7 +83,6 @@ public class Balloon {
         path.getElements().add(new LineTo(191,  414 + this.offset_y)); // 505
         path.getElements().add(new LineTo(191,  559 + this.offset_y)); // 650
 
-        System.out.println(ballon_img.getY());
         PathTransition pathTransition = new PathTransition();
         pathTransition.setPath(path);
         pathTransition.setDuration(Duration.seconds(ballon_speed));

@@ -52,12 +52,6 @@ public class GameController {
     public void startRound() throws IOException
     {
         System.out.println("!");
-        //testowy
-        /*
-        Ballon balloon = new Ballon(5);
-        gridPane.getChildren().add(balloon.getImageView());
-        balloon.followPath();
-         */
         AppConstans.gameState.setRoundContinues();
         AppConstans.gameState.changeWaveStarted();
     }
@@ -100,10 +94,12 @@ public class GameController {
     {
         //gridPane.getChildren().add(balloon.getImageView());
         gridPane.add(balloon.getImageView(), 0,0);
+        /*
         System.out.println("Dzieci gridPane:");
         for (Node node : gridPane.getChildren()) {
             System.out.println("- " + node + ", id: " + node.getId());
         }
+         */
         //grid pane add with row and column?
     }
 
