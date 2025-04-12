@@ -13,16 +13,18 @@
         <RowConstraints percentHeight="100" vgrow="ALWAYS"/>
     </rowConstraints>
 
-    <AnchorPane GridPane.columnIndex="0">
-        <ImageView fx:id="backgroundGameImage" preserveRatio="false"/>
-    </AnchorPane>
+    <StackPane GridPane.columnIndex="0">
+        <AnchorPane fx:id="mapPane">
+            <ImageView fx:id="backgroundGameImage" preserveRatio="false"/>
+        </AnchorPane>
+    </StackPane>
     <VBox fx:id="sideGamePanel" GridPane.columnIndex="1" spacing="10" alignment="CENTER" >
         <GridPane.margin>
             <Insets top="2" bottom="2" left="2" right="5"/>
         </GridPane.margin>
         <GridPane fx:id="panelContainer">
             <columnConstraints>
-                <ColumnConstraints halignment="CENTER"/>
+                <ColumnConstraints percentWidth="100" halignment="CENTER"/>
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints percentHeight="10" vgrow="NEVER"></RowConstraints>
@@ -34,15 +36,15 @@
                 <RowConstraints percentHeight="10" vgrow="ALWAYS"></RowConstraints>
                 <RowConstraints percentHeight="5" vgrow="ALWAYS"></RowConstraints>
             </rowConstraints>
-            <Label text="Current Wave : 1" fx:id="roundLabel" GridPane.rowIndex="0"/>
-            <Label text="Money : 650" fx:id="moneyLabel" GridPane.rowIndex="1"/>
-            <Label text="Lives : 40" fx:id="livesLabel" GridPane.rowIndex="2"/>
-            <Label text="Defense Towers" GridPane.rowIndex="4"/>
-            <GridPane GridPane.rowIndex="5">
-
-            </GridPane>
-            <Button text="Start Round!" fx:id="startRoundButton" GridPane.rowIndex="6" onAction="#startRound"/>
-            <Button text="Restart Game" fx:id="restartGameButton" GridPane.rowIndex="7" onAction="#restartGame"/>
+            <Label text="Current Wave : 1" fx:id="roundLabel" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <Label text="Money : 650" fx:id="moneyLabel" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+            <Label text="Lives : 40" fx:id="livesLabel" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+            <Label text="Defense Towers" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+            <FlowPane GridPane.rowIndex="5"  hgap="10" vgap="10">
+                <Button fx:id="dartDefensorButton" onMouseClicked="#dartDefensorClicked"/>
+            </FlowPane>
+            <Button text="Start Round!" fx:id="startRoundButton" GridPane.rowIndex="6" GridPane.columnIndex="0" onAction="#startRound"/>
+            <Button text="Restart Game" fx:id="restartGameButton" GridPane.rowIndex="7" GridPane.columnIndex="0" onAction="#restartGame"/>
         </GridPane>
     </VBox>
 </GridPane>

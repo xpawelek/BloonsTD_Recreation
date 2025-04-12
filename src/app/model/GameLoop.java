@@ -28,11 +28,17 @@ public class GameLoop extends AnimationTimer {
     public GameLoop(GameController gameController) {
         this.gameController = gameController;
         this.ballonsPowerProbability.set(0, 100);
+        System.out.println(AppConstans.ballon_img_list.size() - 3);
     }
 
     public int drawBalloonIndexBasedOnWeight() {
-        int[] availableBalloonsNums = currentBalloonsAllowed.stream().mapToInt(i -> i).toArray();
-        int[] weights = ballonsPowerProbability.stream().mapToInt(i -> i).filter(i -> i > 0).toArray();
+        int[] availableBalloonsNums = currentBalloonsAllowed.stream()
+                .mapToInt(i -> i)
+                .toArray();
+
+        int[] weights = ballonsPowerProbability.stream().mapToInt(i -> i)
+                .filter(i -> i > 0)
+                .toArray();
 
         int totalWeight = Arrays.stream(weights).sum();
         int random_num = random.nextInt(totalWeight);
@@ -75,10 +81,10 @@ public class GameLoop extends AnimationTimer {
 
     private void addRandomAdditionalBallons()
     {
-        int rand_num = (int)(Math.random() * 50) + 1;
+        int rand_num = (int)(Math.random() * 5) + 1;
 
         //losujemy dodatkowo możliwosc ze pojawia sie od 1 do 3 balonow z kazdego mozliwego lvl
-        if(rand_num == (int)(Math.random() * 50) + 1)
+        if(rand_num == (int)(Math.random() * 5) + 1)
         {
             for(int i = 0; i < (int)(Math.random() * 8) + 1; i++)
             {

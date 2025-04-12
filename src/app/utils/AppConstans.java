@@ -1,8 +1,9 @@
 package app.utils;
 
+import app.model.DeffenceTower;
 import app.model.GameState;
-import javafx.scene.text.Font;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,4 +26,6 @@ public class AppConstans {
         ballon_img_list.put(ballons_path + "black_balloon.png", 7);
         ballon_img_list.put(ballons_path + "white_balloon.png", 7);
     }
+
+    public static List<DeffenceTower> boughtTowers = new ArrayList<>();
 }
