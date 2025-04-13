@@ -15,14 +15,18 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import app.core.Main;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+
+import javafx.scene.Node;
 
 public class GameController {
     public VBox sideGamePanel;
@@ -32,12 +36,14 @@ public class GameController {
     public Label roundLabel;
     public Label moneyLabel;
     public Label livesLabel;
-    public Button dartDefensorButton;
+    public Button dartDefender;
     public AnchorPane mapPane;
     @FXML private Button goBack;
     @FXML private ImageView backgroundGameImage;
     @FXML private GridPane gridPane;
     private final GameLoop gameLoop = new GameLoop(this);
+    private boolean placingTower = false;
+    private Group currentGhost = null;
     @FXML
     public void initialize() {
         Image image = new Image(getClass().getResourceAsStream("/app/view/assets/images/bloons_map.png"));
@@ -45,7 +51,7 @@ public class GameController {
         backgroundGameImage.setFitWidth(AppConstans.SCREEN_WIDTH);
         backgroundGameImage.setFitHeight(AppConstans.SCREEN_HEIGHT);
 
-        dartDefensorButton.getStyleClass().add("defense-button");
+        dartDefender.getStyleClass().add("defense-button");
         panelContainer.getStyleClass().add("panel-container");
         sideGamePanel.getStyleClass().add("side-game-panel");
 
@@ -99,10 +105,11 @@ public class GameController {
         startRoundButton.setDisable(false);
     }
 
-    public void addElementOnGridPane(Balloon balloon)
+    public void addBalloonToMapPane(Balloon balloon)
     {
         //gridPane.getChildren().add(balloon.getImageView());
-        gridPane.add(balloon.getImageView(), 0,0);
+        //gridPane.add(balloon.getImageView(), 0,0);
+        mapPane.getChildren().add(balloon.getImageView());
         /*
         System.out.println("Dzieci gridPane:");
         for (Node node : gridPane.getChildren()) {
@@ -112,14 +119,14 @@ public class GameController {
         //grid pane add with row and column?
     }
 
-    public GridPane getGridPane()
+    public Pane getMapPane()
     {
-        return gridPane;
+        return mapPane;
     }
 
-    public void removeElementFromGridPane(Balloon balloon)
+    public void removeBalloonFromMapPane(Balloon balloon)
     {
-        gridPane.getChildren().remove(balloon.getImageView());
+        mapPane.getChildren().remove(balloon.getImageView());
         //po zmianie image nie wiadomo czy nie inny sposob usuniecia np po id
     }
 
@@ -129,19 +136,56 @@ public class GameController {
         return bounds.getCenterY();
     }
 
-    public void dartDefensorClicked(MouseEvent mouseEvent) {
-        Image dartImage = new Image(getClass().getResource("/app/view/assets/images/dart_defensor.png").toExternalForm());
+    public void addTowerToMapPane(DeffenceTower deffenceTower)
+    {
+        System.out.println("dodawniae??");
+        ImageView towerImage = deffenceTower.getTowerImg();
+        towerImage.setLayoutX(deffenceTower.getTowerX());
+        towerImage.setLayoutY(deffenceTower.getTowerY());
+
+        mapPane.getChildren().add(towerImage);
+    }
+
+    private void cancelPlacing()
+    {
+        placingTower = false;
+
+        mapPane.setOnMouseClicked(null);
+        mapPane.setOnMouseMoved(null);
+
+        if(currentGhost != null)
+        {
+            mapPane.getChildren().remove(currentGhost);
+            currentGhost = null;
+        }
+    }
+
+    public void defenderClicked(MouseEvent mouseEvent) {
+        String id = (String) ((Node) mouseEvent.getSource()).getId();
+        AtomicBoolean canPlace = new AtomicBoolean(false);
+
+        if(placingTower)
+        {
+            cancelPlacing();
+            return;
+        }
+
+        placingTower = true;
+
+        Image dartImage = new Image(getClass().getResource("/app/view/assets/images/" + id + ".png").toExternalForm());
         ImageView ghostMonkey = new ImageView(dartImage);
         ghostMonkey.setOpacity(0.8);
         ghostMonkey.setMouseTransparent(true);
 
         double centerX = dartImage.getWidth() / 2;
         double centerY = dartImage.getHeight() / 2;
-        double range = 80;
+        double range = 100;
 
         Circle rangeCircle = new Circle(range);
-        rangeCircle.setStroke(Color.color(1, 1, 1, 0.5));
-        rangeCircle.setFill(Color.color(1, 1, 1, 0.1));
+        //rangeCircle.setStroke(Color.color(1, 1, 1, 0.5));
+        //rangeCircle.setFill(Color.color(1, 1, 1, 0.1));
+        rangeCircle.setStroke(Color.color(1, 0, 0, 0.5));
+        rangeCircle.setFill(Color.color(1, 0, 0, 0.3));
         rangeCircle.setMouseTransparent(true);
         rangeCircle.setCenterX(centerX);
         rangeCircle.setCenterY(centerY);
@@ -150,6 +194,7 @@ public class GameController {
         ghost.setLayoutX(mouseEvent.getX() - centerX);
         ghost.setLayoutY(mouseEvent.getY() - centerY);
         ghost.setManaged(false);
+        currentGhost = ghost;
 
         mapPane.getChildren().add(ghost);
 
@@ -158,19 +203,45 @@ public class GameController {
             {
                 ghost.setLayoutX(e.getX() - centerX);
                 ghost.setLayoutY(e.getY() - centerY);
+
+                rangeCircle.setStroke(Color.color(1, 0, 0, 0.5));
+                rangeCircle.setFill(Color.color(1, 0, 0, 0.3));
+
+                canPlace.set(false);
+
+                for (Map.Entry<Double, Double> point : AppConstans.roadPoints) {
+                    double dx = point.getKey() - e.getX();
+                    double dy = point.getValue() - e.getY();
+                    //euklides ^2
+                    if(dx * dx + dy * dy <= range * range)
+                    {
+                        rangeCircle.setStroke(Color.color(1, 1, 1, 0.5));
+                        rangeCircle.setFill(Color.color(1, 1, 1, 0.1));
+                        canPlace.set(true);
+                    }
+                }
             }
             return;
         });
 
         mapPane.setOnMouseClicked(e -> {
-            //DartTower tower = new DartTower(e.getX() - centerX, e.getY() - centerY);
-            //AppConstans.boughtTowers.add(tower);
-            mapPane.getChildren().remove(ghost);
-            ImageView monkey = new ImageView(dartImage);
-            monkey.setLayoutX(e.getX() - centerX);
-            monkey.setLayoutY(e.getY() - centerY);
-            monkey.setMouseTransparent(false);
-            mapPane.getChildren().add(monkey);
+            if(canPlace.get())
+            {
+                //DartTower tower = new DartTower(e.getX() - centerX, e.getY() - centerY);
+                //AppConstans.boughtTowers.add(tower);
+                mapPane.getChildren().remove(ghost);
+                //ImageView monkey = new ImageView(dartImage);
+                //monkey.setLayoutX(e.getX() - centerX);
+                // monkey.setLayoutY(e.getY() - centerY);
+                // monkey.setMouseTransparent(false);
+                // mapPane.getChildren().add(monkey);
+
+                DartTower tower = new DartTower(e.getX() - centerX, e.getY() - centerY);
+                AppConstans.boughtTowers.add(tower);
+                System.out.println("dodano tower");
+
+                cancelPlacing();
+            }
         });
 
     }

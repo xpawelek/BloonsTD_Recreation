@@ -41,7 +41,7 @@
             <Label text="Lives : 40" fx:id="livesLabel" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
             <Label text="Defense Towers" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
             <FlowPane GridPane.rowIndex="5"  hgap="10" vgap="10">
-                <Button fx:id="dartDefensorButton" onMouseClicked="#dartDefensorClicked"/>
+                <Button fx:id="dartDefender" onMouseClicked="#defenderClicked"/>
             </FlowPane>
             <Button text="Start Round!" fx:id="startRoundButton" GridPane.rowIndex="6" GridPane.columnIndex="0" onAction="#startRound"/>
             <Button text="Restart Game" fx:id="restartGameButton" GridPane.rowIndex="7" GridPane.columnIndex="0" onAction="#restartGame"/>

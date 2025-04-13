@@ -5,7 +5,6 @@ import app.utils.AppConstans;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.scene.Node;
 import javafx.util.Duration;
 
 import java.util.*;
@@ -133,7 +132,7 @@ public class GameLoop extends AnimationTimer {
             delay += randomDelay;
             KeyFrame keyFrame = new KeyFrame(Duration.millis(delay), event -> {
                 balloon.followPath();
-                gameController.addElementOnGridPane(balloon);
+                gameController.addBalloonToMapPane(balloon);
             });
             /*
             KeyFrame keyFrame2 = new KeyFrame(Duration.millis(delay + 8000), event -> {
@@ -202,7 +201,7 @@ public class GameLoop extends AnimationTimer {
     {
         for(Balloon balloon : balloons)
         {
-            gameController.removeElementFromGridPane(balloon);
+            gameController.removeBalloonFromMapPane(balloon);
         }
 
         AppConstans.gameState.setRoundContinues(false);
@@ -212,7 +211,7 @@ public class GameLoop extends AnimationTimer {
 
     public void clearBalloon(Balloon balloon)
     {
-        gameController.removeElementFromGridPane(balloon);
+        gameController.removeBalloonFromMapPane(balloon);
         AppConstans.gameState.loseLife(balloon.getBallonLives());
         updateGameInfo();
     }
@@ -222,11 +221,26 @@ public class GameLoop extends AnimationTimer {
         return AppConstans.gameState.getLives() > 0;
     }
 
+    void addTower()
+    {
+        //System.out.println("sprawdzam");
+        for(DeffenceTower tower : AppConstans.boughtTowers)
+        {
+            if(!tower.getIsOnMapPane())
+            {
+                tower.setIsOnMapPane();
+                gameController.addTowerToMapPane(tower);
+            }
+        }
+    }
+
+
     @Override
     public void handle(long now)
     {
         if(AppConstans.gameState.getGameContinues()) {
             updateGameInfo();
+            addTower();
             if(AppConstans.gameState.getRoundContinues()) {
                 if(!isAnyLifeLeft())
                 {
@@ -251,6 +265,8 @@ public class GameLoop extends AnimationTimer {
         }
         else {
             //clear game loop elepments in class
+            clearBalloonsAfterWave();
+            AppConstans.boughtTowers.clear();
             stop();
         }
     }

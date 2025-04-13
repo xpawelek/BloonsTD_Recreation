@@ -13,12 +13,13 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Balloon {
     private int ballon_lives;
     private int ballon_speed;
     private ImageView ballon_img;
-    private double offset_y = -290 - (-100);
+    private double offset_y = 100;
     private Path path = new Path();
 
     public Balloon() {}
@@ -63,25 +64,11 @@ public class Balloon {
 
     public void followPath() {
         Path path = new Path();
-        path.getElements().add(new MoveTo(350, -150 + this.offset_y));
-        path.getElements().add(new LineTo(346, -50 + this.offset_y));
-        path.getElements().add(new LineTo(337, -30 + this.offset_y));
-        path.getElements().add(new LineTo(299, -18 + this.offset_y));//82
-        path.getElements().add(new LineTo(229, -14 + this.offset_y)); //86
-        path.getElements().add(new LineTo(220, 8 + this.offset_y)); // 108
-        path.getElements().add(new LineTo(222, 68 + this.offset_y)); // 168
-        path.getElements().add(new LineTo(246, 91 + this.offset_y)); // 191
-        path.getElements().add(new LineTo(428, 103 + this.offset_y)); // 203
-        path.getElements().add(new LineTo(443, 118 + this.offset_y)); // 218
-        path.getElements().add(new LineTo(440,  195 + this.offset_y)); // 295
-        path.getElements().add(new LineTo(414,  215 + this.offset_y)); // 315
-        path.getElements().add(new LineTo(349,  228 + this.offset_y)); // 328
-        path.getElements().add(new LineTo(337,  241 + this.offset_y)); // 341
-        path.getElements().add(new LineTo(326,  360 + this.offset_y)); // 460
-        path.getElements().add(new LineTo(307,  380 + this.offset_y)); // 480
-        path.getElements().add(new LineTo(208,  389 + this.offset_y)); // 480
-        path.getElements().add(new LineTo(191,  414 + this.offset_y)); // 505
-        path.getElements().add(new LineTo(191,  559 + this.offset_y)); // 650
+        path.getElements().add(new MoveTo(AppConstans.roadPoints.getFirst().getKey(), AppConstans.roadPoints.getFirst().getValue()));
+        for (Map.Entry<Double, Double> point : AppConstans.roadPoints) {
+            path.getElements().add(new LineTo(point.getKey(), point.getValue()));
+        }
+
 
         PathTransition pathTransition = new PathTransition();
         pathTransition.setPath(path);

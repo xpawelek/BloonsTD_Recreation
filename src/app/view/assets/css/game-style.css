@@ -74,7 +74,7 @@
     -fx-scale-y: 1;
 }
 
-#dartDefensorButton
+#dartDefender
 {
-    -fx-background-image: url("/app/view/assets/images/dart_defensor_icon.png");
+    -fx-background-image: url("/app/view/assets/images/dart_defender_icon.png");
 }
