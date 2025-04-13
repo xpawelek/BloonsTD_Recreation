@@ -288,16 +288,31 @@ public class GameController {
 
                 canPlace.set(false);
 
+                boolean isInRange = false;
+                boolean isOnThePath = false;
+
+                //jesli w ktorymkolwiek punkcie odleglosc > range -> mniejsza od
+                //wielkosci drogi - tez nie mozna, mniedzy range a droga -> mozna
                 for (Map.Entry<Double, Double> point : AppConstans.roadPoints) {
                     double dx = point.getKey() - e.getX();
                     double dy = point.getValue() - e.getY();
-                    //euklides ^2
+                    //euklides ^2, forbid putting
                     if(dx * dx + dy * dy <= range * range)
                     {
-                        rangeCircle.setStroke(Color.color(1, 1, 1, 0.5));
-                        rangeCircle.setFill(Color.color(1, 1, 1, 0.1));
-                        canPlace.set(true);
+                        isInRange = true;
                     }
+
+                    if(dx * dx + dy * dy <= (range / 2) * (range / 2))
+                    {
+                        isOnThePath = true;
+                        break;
+                    }
+                }
+                if(isInRange && !isOnThePath)
+                {
+                    rangeCircle.setStroke(Color.color(1, 1, 1, 0.5));
+                    rangeCircle.setFill(Color.color(1, 1, 1, 0.1));
+                    canPlace.set(true);
                 }
             }
             return;

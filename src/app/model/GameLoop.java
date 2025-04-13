@@ -240,6 +240,7 @@ public class GameLoop extends AnimationTimer {
             if(AppConstans.currentClickedDeffenceTower.getSellTower()) {
                 gameController.removeTowerFromMapPane(AppConstans.currentClickedDeffenceTower);
                 AppConstans.boughtTowers.remove(AppConstans.currentClickedDeffenceTower);
+                AppConstans.currentClickedDeffenceTower.setSellTower();
                 AppConstans.currentClickedDeffenceTower = null;
                 System.out.println("removing, left: " + AppConstans.boughtTowers.size());
             }

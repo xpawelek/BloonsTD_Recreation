@@ -1,5 +1,6 @@
 package app.model;
 
+import app.utils.AppConstans;
 import javafx.scene.image.ImageView;
 
 public abstract class DeffenceTower {
@@ -43,6 +44,11 @@ public abstract class DeffenceTower {
 
     public void setSellTower(){
         sellTower = true;
+    }
+
+    public void sellingTower()
+    {
+        //AppConstans.gameState.updateMoneyAfterBuying(); chcemy dodac rownowartosc 80% wartosci malpy
     }
 
     public boolean getSellTower(){
