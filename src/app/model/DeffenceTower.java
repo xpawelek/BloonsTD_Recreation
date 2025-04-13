@@ -8,7 +8,9 @@ public abstract class DeffenceTower {
     protected double positionY;
     protected ImageView towerImg;
     protected boolean isOnMapPane = false;
+    protected boolean sellTower = false;
 
+    public DeffenceTower() {}
     public DeffenceTower(double positionX, double positionY)
     {
         this.positionX = positionX;
@@ -33,5 +35,17 @@ public abstract class DeffenceTower {
 
     public boolean getIsOnMapPane(){
         return isOnMapPane;
+    }
+
+    public int getPrice(){
+        return price;
+    }
+
+    public void setSellTower(){
+        sellTower = true;
+    }
+
+    public boolean getSellTower(){
+        return sellTower;
     }
 }

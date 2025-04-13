@@ -13,6 +13,7 @@ public class AppConstans {
     public static GameState gameState = new GameState();
     public static String ballons_path =  "/app/view/assets/images/";
     public static Map<String, Integer> ballon_img_list = new LinkedHashMap<>();
+    public static DeffenceTower currentClickedDeffenceTower = null;
 
     static {
         ballon_img_list.put(ballons_path + "dead_balloon.png", 0);

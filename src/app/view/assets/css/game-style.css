@@ -45,10 +45,27 @@
 
 .panel-container #restartGameButton
 {
-    -fx-text-fill: red;
+    -fx-text-fill: #FF6347;
     -fx-background-color: transparent;
     -fx-font-size: 15px;
     -fx-font-weight: bold;
+}
+
+#sellTower{
+    -fx-padding: 5 10;
+    -fx-background-color: transparent;
+    -fx-text-fill: #FF2800;
+    -fx-border-color: #FF2800;
+    -fx-border-width: 1px;
+    -fx-border-style: solid;
+    -fx-font-weight: bold;
+    -fx-transition: all 0.5s;
+    -fx-effect: dropshadow(gaussian, #2D2D2D, 6, 0.5, 0.1, 0.1);
+}
+
+#sellTower:hover
+{
+    -fx-effect: dropshadow(gaussian, #800080, 5, 0.55, 0, 0);
 }
 
 .defense-button

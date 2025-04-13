@@ -234,6 +234,18 @@ public class GameLoop extends AnimationTimer {
         }
     }
 
+    void manageTower(){
+        if(AppConstans.boughtTowers.contains(AppConstans.currentClickedDeffenceTower)){
+            System.out.println("contains");
+            if(AppConstans.currentClickedDeffenceTower.getSellTower()) {
+                gameController.removeTowerFromMapPane(AppConstans.currentClickedDeffenceTower);
+                AppConstans.boughtTowers.remove(AppConstans.currentClickedDeffenceTower);
+                AppConstans.currentClickedDeffenceTower = null;
+                System.out.println("removing, left: " + AppConstans.boughtTowers.size());
+            }
+        }
+    }
+
 
     @Override
     public void handle(long now)
@@ -241,6 +253,7 @@ public class GameLoop extends AnimationTimer {
         if(AppConstans.gameState.getGameContinues()) {
             updateGameInfo();
             addTower();
+            manageTower();
             if(AppConstans.gameState.getRoundContinues()) {
                 if(!isAnyLifeLeft())
                 {

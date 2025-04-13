@@ -8,9 +8,11 @@ import app.utils.AppConstans;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
@@ -38,18 +40,25 @@ public class GameController {
     public Label livesLabel;
     public Button dartDefender;
     public AnchorPane mapPane;
+    public FlowPane towersBoard;
+    public FlowPane towerModifyBoard;
+    public Button sellTower;
     @FXML private Button goBack;
     @FXML private ImageView backgroundGameImage;
     @FXML private GridPane gridPane;
     private final GameLoop gameLoop = new GameLoop(this);
     private boolean placingTower = false;
     private Group currentGhost = null;
+    private Circle rangeCircle = null;
+    private ImageView selectedTower = null;
     @FXML
     public void initialize() {
         Image image = new Image(getClass().getResourceAsStream("/app/view/assets/images/bloons_map.png"));
         backgroundGameImage.setImage(image);
         backgroundGameImage.setFitWidth(AppConstans.SCREEN_WIDTH);
         backgroundGameImage.setFitHeight(AppConstans.SCREEN_HEIGHT);
+        towersBoard.setVisible(true);
+        towerModifyBoard.setVisible(false);
 
         dartDefender.getStyleClass().add("defense-button");
         panelContainer.getStyleClass().add("panel-container");
@@ -142,8 +151,72 @@ public class GameController {
         ImageView towerImage = deffenceTower.getTowerImg();
         towerImage.setLayoutX(deffenceTower.getTowerX());
         towerImage.setLayoutY(deffenceTower.getTowerY());
-
+        towerImage.setUserData(deffenceTower);
+        towerImage.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> towerClickedHandler(event));
         mapPane.getChildren().add(towerImage);
+    }
+
+    public void removeTowerFromMapPane(DeffenceTower deffenceTower) {
+        if (mapPane.getChildren().contains(deffenceTower.getTowerImg()))
+        {
+            mapPane.getChildren().remove(deffenceTower.getTowerImg());
+            mapPane.getChildren().remove(rangeCircle);
+        }
+    }
+
+    public void towerClickedHandler(MouseEvent event) {
+        event.consume();
+
+        Node clickedTower = (Node) event.getSource();
+        mapPane.getChildren().remove(rangeCircle);
+        AppConstans.currentClickedDeffenceTower = null;
+
+        if (selectedTower == clickedTower) {
+            selectedTower = null;
+            return;
+        }
+
+        int range = 100;
+        rangeCircle = new Circle(range);
+        selectedTower = (ImageView)event.getSource();
+        AppConstans.currentClickedDeffenceTower = (DeffenceTower) selectedTower.getUserData();
+        towersBoard.setVisible(false);
+        towerModifyBoard.setVisible(true);
+
+        Point2D towerCenterInMapPane = clickedTower.localToParent(
+                clickedTower.getBoundsInLocal().getWidth() / 2,
+                clickedTower.getBoundsInLocal().getHeight() / 2
+        );
+
+        rangeCircle.setStroke(Color.color(1, 1, 1, 0.5));
+        rangeCircle.setFill(Color.color(1, 1, 1, 0.1));
+        rangeCircle.setMouseTransparent(true);
+        rangeCircle.setCenterX(towerCenterInMapPane.getX());
+        rangeCircle.setCenterY(towerCenterInMapPane.getY());
+
+        if (!mapPane.getChildren().contains(rangeCircle))
+        {
+            mapPane.getChildren().add(rangeCircle);
+        }
+
+        mapPane.setOnMouseClicked(e -> {
+            if (e.getButton() == MouseButton.PRIMARY || e.getButton() == MouseButton.SECONDARY) {
+                mapPane.getChildren().remove(rangeCircle);
+                selectedTower = null;
+                AppConstans.currentClickedDeffenceTower = null;
+                towersBoard.setVisible(true);
+                towerModifyBoard.setVisible(false);
+            }
+        });
+
+        sellTower.setOnMouseClicked(e -> {
+            mapPane.getChildren().remove(rangeCircle);
+            selectedTower = null;
+            AppConstans.currentClickedDeffenceTower.setSellTower();
+            towersBoard.setVisible(true);
+            towerModifyBoard.setVisible(false);
+        });
+
     }
 
     private void cancelPlacing()
@@ -161,6 +234,11 @@ public class GameController {
     }
 
     public void defenderClicked(MouseEvent mouseEvent) {
+        //not only dart tower and worth to improve - creating full object
+        if(new DartTower().getPrice() > AppConstans.gameState.getMoney()){
+            return;
+        }
+
         String id = (String) ((Node) mouseEvent.getSource()).getId();
         AtomicBoolean canPlace = new AtomicBoolean(false);
 
@@ -170,6 +248,7 @@ public class GameController {
             return;
         }
 
+        mapPane.getChildren().remove(rangeCircle);
         placingTower = true;
 
         Image dartImage = new Image(getClass().getResource("/app/view/assets/images/" + id + ".png").toExternalForm());
@@ -181,7 +260,7 @@ public class GameController {
         double centerY = dartImage.getHeight() / 2;
         double range = 100;
 
-        Circle rangeCircle = new Circle(range);
+        rangeCircle = new Circle(range);
         //rangeCircle.setStroke(Color.color(1, 1, 1, 0.5));
         //rangeCircle.setFill(Color.color(1, 1, 1, 0.1));
         rangeCircle.setStroke(Color.color(1, 0, 0, 0.5));
@@ -225,6 +304,11 @@ public class GameController {
         });
 
         mapPane.setOnMouseClicked(e -> {
+            if(e.getButton() == MouseButton.SECONDARY) {
+                cancelPlacing();
+                return;
+            }
+
             if(canPlace.get())
             {
                 //DartTower tower = new DartTower(e.getX() - centerX, e.getY() - centerY);
@@ -238,6 +322,7 @@ public class GameController {
 
                 DartTower tower = new DartTower(e.getX() - centerX, e.getY() - centerY);
                 AppConstans.boughtTowers.add(tower);
+                //AppConstans.gameState.updateMoneyAfterBuying(tower.getPrice());
                 System.out.println("dodano tower");
 
                 cancelPlacing();
