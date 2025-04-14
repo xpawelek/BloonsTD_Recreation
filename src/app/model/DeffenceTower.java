@@ -54,4 +54,7 @@ public abstract class DeffenceTower {
     public boolean getSellTower(){
         return sellTower;
     }
+
+    public abstract Balloon balloonInRange(Balloon balloon);
+    public abstract void manageHitting(Balloon balloon);
 }

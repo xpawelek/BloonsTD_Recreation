@@ -22,7 +22,7 @@ public class GameLoop extends AnimationTimer {
     private boolean turnOnProbability = false;
     private int probabilityIndex = 0;
     private final Random random = new Random();
-    private final Timeline timeline = new Timeline();
+    private final Timeline timelineBalloons = new Timeline();
 
     public GameLoop(GameController gameController) {
         this.gameController = gameController;
@@ -139,10 +139,11 @@ public class GameLoop extends AnimationTimer {
                 clearBalloonsAfterWave();
             });
              */
-            timeline.getKeyFrames().add(keyFrame);
+            timelineBalloons.getKeyFrames().add(keyFrame);
            // timeline.getKeyFrames().add(keyFrame2);
         }
-        timeline.play();
+        timelineBalloons.play();
+        System.out.println(balloons.size());
         //po tym wuzej kod poniezej od razu sie wykonuje
 
         //jesli sie skonczy runda tzn wszystkie dotra do konca, albo wszystkie zostana zbite, to
@@ -161,14 +162,18 @@ public class GameLoop extends AnimationTimer {
         while(iterator.hasNext())
         {
             Balloon balloon = iterator.next();
-            if(checkIfBallonReachedFinish(balloon))
+            if(checkIfBallonReachedFinish(balloon) || balloonHasNoMoreLives(balloon))
             {
                 clearBalloon(balloon);
                 iterator.remove();
             }
+            //check if balloon got hit
+            modifyBalloonsPosition(balloon);
+            //checkIfBalloonInRangeOfTower(balloon);
+            //System.out.println("goes throught wave");
         }
 
-        if(areAllBallonsDestroyed())
+        if(areAllBalloonsDestroyed())
         {
             clearBalloonsAfterWave();
             if(isAnyLifeLeft())
@@ -177,22 +182,64 @@ public class GameLoop extends AnimationTimer {
                 updateGameInfo();
             }
         }
+    }
 
+    private boolean balloonHasNoMoreLives(Balloon balloon) {
+        return balloon.getBallonLives() <= 0;
+    }
 
+    public void modifyBalloonsPosition(Balloon balloon)
+    {
+        balloon.setBalloonPositionX(gameController.getPositionX(balloon));
+        balloon.setBalloonPositionY(gameController.getPositionY(balloon));
     }
 
     public boolean checkIfBallonReachedFinish(Balloon balloon)
     {
         int allowableRange = 30;
-        if(Math.abs(gameController.getPositionY(balloon)) > AppConstans.SCREEN_HEIGHT + allowableRange)
-        {
-            return true;
-        }
-
-        return false;
+        return Math.abs(balloon.getBalloonPositionY()) > AppConstans.SCREEN_HEIGHT + allowableRange;
     }
 
-    public boolean areAllBallonsDestroyed()
+    public void checkIfBalloonInRangeOfTower(Balloon balloon)
+    {
+        for(DeffenceTower tower : AppConstans.boughtTowers)
+        {
+            tower.manageHitting(balloon);
+            updateTowerAngle();
+            //jest tower jest darttower to musimy przejsc przez kazda list dart
+            //dodac je do map pane i wykonac animacje, usuwamy tez ktore sa finished, a zaczynamy animacje
+            //tych ktore nie sa finisjed
+            if(((DartTower) tower).getDarts() != null && !((DartTower) tower).getDarts().isEmpty()) {
+                Iterator<Dart> iterator = ((DartTower) tower).getDarts().iterator();
+                while (iterator.hasNext()) {
+                    Dart dart = iterator.next();
+                    if (!dart.isFinished()) {
+                        if (!gameController.mapPane.getChildren().contains(dart.getDartImage())) {
+                            //dart.setRotate(((DartTower) tower).getAngle());
+                            gameController.mapPane.getChildren().add(dart.getDartImage());
+                        }
+                        dart.throwDart(balloon);
+                    } else {
+                        gameController.mapPane.getChildren().remove(dart.getDartImage());
+                        iterator.remove();
+                    }
+                }
+            }
+        }
+    }
+
+    public void updateTowerAngle()
+    {
+        for(DeffenceTower tower : AppConstans.boughtTowers) {
+            if (tower instanceof DartTower)
+            {
+                if(((DartTower) tower).getAngle() != -1)
+                    gameController.upadateTowerAngle(tower);
+            }
+        }
+    }
+
+    public boolean areAllBalloonsDestroyed()
     {
         return this.balloons.isEmpty();
     }
@@ -203,10 +250,10 @@ public class GameLoop extends AnimationTimer {
         {
             gameController.removeBalloonFromMapPane(balloon);
         }
-
+        System.out.println(this.balloons.size());
         AppConstans.gameState.setRoundContinues(false);
         this.balloons.clear();
-        this.timeline.getKeyFrames().clear(); // <- musi byc clearoweane
+        this.timelineBalloons.getKeyFrames().clear(); // <- musi byc clearoweane
     }
 
     public void clearBalloon(Balloon balloon)
@@ -236,7 +283,7 @@ public class GameLoop extends AnimationTimer {
 
     void manageTower(){
         if(AppConstans.boughtTowers.contains(AppConstans.currentClickedDeffenceTower)){
-            System.out.println("contains");
+            //System.out.println("contains");
             if(AppConstans.currentClickedDeffenceTower.getSellTower()) {
                 gameController.removeTowerFromMapPane(AppConstans.currentClickedDeffenceTower);
                 AppConstans.boughtTowers.remove(AppConstans.currentClickedDeffenceTower);
@@ -256,6 +303,7 @@ public class GameLoop extends AnimationTimer {
             addTower();
             manageTower();
             if(AppConstans.gameState.getRoundContinues()) {
+                //System.out.println("round goes");
                 if(!isAnyLifeLeft())
                 {
                     //komunnikat + czszyczenie + freeze game

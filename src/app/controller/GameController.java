@@ -139,6 +139,12 @@ public class GameController {
         //po zmianie image nie wiadomo czy nie inny sposob usuniecia np po id
     }
 
+    public double getPositionX(Balloon balloon)
+    {
+        Bounds bounds = balloon.getImageView().localToScene(balloon.getImageView().getBoundsInLocal());
+        return bounds.getCenterX();
+    }
+
     public double getPositionY(Balloon balloon)
     {
         Bounds bounds = balloon.getImageView().localToScene(balloon.getImageView().getBoundsInLocal());
@@ -164,12 +170,24 @@ public class GameController {
         }
     }
 
+    public void upadateTowerAngle(DeffenceTower deffenceTower)
+    {
+        if (mapPane.getChildren().contains(deffenceTower.getTowerImg()))
+        {
+            if(deffenceTower instanceof DartTower)
+            {
+                deffenceTower.getTowerImg().setRotate(((DartTower) deffenceTower).getAngle() + 90);
+            }
+        }
+    }
+
     public void towerClickedHandler(MouseEvent event) {
         event.consume();
 
         Node clickedTower = (Node) event.getSource();
         mapPane.getChildren().remove(rangeCircle);
         AppConstans.currentClickedDeffenceTower = null;
+        //clickedTower.setRotate(45);
 
         if (selectedTower == clickedTower) {
             selectedTower = null;
@@ -259,6 +277,7 @@ public class GameController {
         double centerX = dartImage.getWidth() / 2;
         double centerY = dartImage.getHeight() / 2;
         double range = 100;
+        int roadWidth = 50;
 
         rangeCircle = new Circle(range);
         //rangeCircle.setStroke(Color.color(1, 1, 1, 0.5));
@@ -302,7 +321,7 @@ public class GameController {
                         isInRange = true;
                     }
 
-                    if(dx * dx + dy * dy <= (range / 2) * (range / 2))
+                    if(dx * dx + dy * dy <= roadWidth * roadWidth)
                     {
                         isOnThePath = true;
                         break;

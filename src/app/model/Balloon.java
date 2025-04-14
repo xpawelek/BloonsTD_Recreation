@@ -21,6 +21,8 @@ public class Balloon {
     private ImageView ballon_img;
     private double offset_y = 100;
     private Path path = new Path();
+    private double balloonPositionX;
+    private double balloonPositionY;
 
     public Balloon() {}
     public Balloon(int ballon_lives) {
@@ -77,5 +79,25 @@ public class Balloon {
         pathTransition.setNode(getImageView());
         pathTransition.play();
         //finish reached?
+    }
+
+    public void setBalloonPositionX(double balloonPositionX)
+    {
+        this.balloonPositionX = balloonPositionX;
+    }
+
+    public double getBalloonPositionX()
+    {
+        return balloonPositionX;
+    }
+
+    public void setBalloonPositionY(double balloonPositionY)
+    {
+        this.balloonPositionY = balloonPositionY;
+    }
+
+    public double getBalloonPositionY()
+    {
+        return balloonPositionY;
     }
 }
