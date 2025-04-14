@@ -78,13 +78,13 @@ public class GameState {
 
     public void loseLife(int lives)
     {
-        //this.lives -= lives;
-        this.lives -= 0;
+        this.lives -= lives;
+        //this.lives -= 0;
     }
 
     public void addCoin()
     {
-        money++;
+        money += 2;
     }
 
     public void updateCurrentWave()

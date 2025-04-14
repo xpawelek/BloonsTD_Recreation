@@ -1,26 +1,28 @@
 package app.model;
 
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 public class DartTower extends DeffenceTower {
-    private List<Dart> manageableDarts;
     private int range = 100;
     private double angle = -1;
     private long lastShotTime = 0;
-    private long fire_cooldown = 500;
+    private long fire_cooldown = 800;
+    private List<Balloon> balloonsInRange = new ArrayList<>();
 
     public DartTower() {
-        price = 350;
+        price = 300;
     }
 
     public DartTower(double positionX, double positionY) {
         super(positionX, positionY);
-        this.manageableDarts = new ArrayList<>();
         towerImg = new ImageView("/app/view/assets/images/dartDefender.png");
-        price = 350;
+        price = 300;
     }
 
     @Override
@@ -30,35 +32,47 @@ public class DartTower extends DeffenceTower {
         double dy = getTowerY() - balloon.getBalloonPositionY();
         if(dx * dx + dy * dy <= range * range)
         {
-            //System.out.println("ballon w zasięgu");
+            balloonsInRange.add(balloon);
             return balloon;
         }
-        //mozna dodawac do listy i wyrzucac tego z najwieksza iloscia zyc
         return null;
     }
 
     @Override
-    public void manageHitting(Balloon balloon)
+    public void manageHitting(Balloon balloon, Pane mapPane)
     {
-        //jesli w range jest balon, to wybierz balon wedlug preferencji do zestrzelenia, pobierz jego
-        //x oraz y, mamy takze position x i y wiezy, teraz dart wyrzuci strzała w celu targetu
-        //nowy dart co 50 ms
         long now = System.currentTimeMillis();
-        if(now - lastShotTime >= fire_cooldown) {
-            Balloon b = balloonInRange(balloon);
-            if (b == null) {
-                //angle = 0;
-                return;
-            }
 
-            System.out.println("dart should go");
-            angle = Math.toDegrees(Math.atan2(getTowerY() - b.getBalloonPositionY(), getTowerX() - b.getBalloonPositionX()));
-            Dart dart = new Dart(super.positionX, super.positionY, balloon.getBalloonPositionX(), balloon.getBalloonPositionY());
-            dart.setDartStartingPosition(super.positionX, super.positionY, towerImg.getFitWidth(), towerImg.getFitHeight());
-            manageableDarts.add(dart);
-            dart.throwDart(balloon);
-            lastShotTime = now;
+        if(now - lastShotTime < fire_cooldown)
+            return;
+
+        Balloon b = balloonInRange(balloon);
+        if (b == null) {
+            //angle = 0;
+            return;
         }
+
+        Optional<Balloon> strongest = balloonsInRange.stream()
+                .max(Comparator.comparing(Balloon::getBalloonLives));
+
+        if(strongest.isPresent())
+        {
+            b = strongest.get();
+        }
+
+        angle = Math.toDegrees(Math.atan2(getTowerY() - b.getBalloonPositionY(), getTowerX() - b.getBalloonPositionX()));
+
+        Dart dart = new Dart(super.positionX, super.positionY, balloon.getBalloonPositionX(), balloon.getBalloonPositionY());
+        dart.setDartStartingPosition(super.positionX, super.positionY, towerImg.getFitWidth(), towerImg.getFitHeight());
+        dart.setRotate(angle + 90);
+
+        if (!mapPane.getChildren().contains(dart.getDartImage())) {
+            mapPane.getChildren().add(dart.getDartImage());
+        }
+
+        dart.throwDart(b, mapPane);
+
+        lastShotTime = now;
     }
 
     public double getAngle()
@@ -66,24 +80,5 @@ public class DartTower extends DeffenceTower {
         return angle;
     }
 
-    public List<Dart> getDarts() {
-        if (manageableDarts == null)
-            manageableDarts = new ArrayList<>();
-        return manageableDarts;
-    }
-
-    public void removeDart(Dart dart)
-    {
-        manageableDarts.remove(dart);
-    }
-
-    public long getLastShotTime()
-    {
-        return lastShotTime;
-    }
-
-    public long getFireCooldown()
-    {
-        return fire_cooldown;
-    }
+    //to do - piercing more + range
 }

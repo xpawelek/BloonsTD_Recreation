@@ -16,7 +16,7 @@ public class AppConstans {
     public static DeffenceTower currentClickedDeffenceTower = null;
 
     static {
-        ballon_img_list.put(ballons_path + "dead_balloon.png", 0);
+        ballon_img_list.put(null, null);
         ballon_img_list.put(ballons_path + "red_balloon.png", 12);
         ballon_img_list.put(ballons_path + "blue_balloon.png", 11);
         ballon_img_list.put(ballons_path + "green_balloon.png", 10);

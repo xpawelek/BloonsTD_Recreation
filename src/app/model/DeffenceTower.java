@@ -2,6 +2,7 @@ package app.model;
 
 import app.utils.AppConstans;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 
 public abstract class DeffenceTower {
     protected int price;
@@ -56,5 +57,5 @@ public abstract class DeffenceTower {
     }
 
     public abstract Balloon balloonInRange(Balloon balloon);
-    public abstract void manageHitting(Balloon balloon);
+    public abstract void manageHitting(Balloon balloon, Pane mapPane);
 }

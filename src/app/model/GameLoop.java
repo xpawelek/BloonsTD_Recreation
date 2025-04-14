@@ -88,7 +88,9 @@ public class GameLoop extends AnimationTimer {
             for(int i = 0; i < (int)(Math.random() * 8) + 1; i++)
             {
                 //nie puszczamy najmocniejszych i pierwszego (to bedzie img - koniec)
-                this.balloons.add(new Balloon((int)(Math.random() * AppConstans.ballon_img_list.size() - 3) + 1));
+                int rand_balloon_index = (int)(Math.random() * (AppConstans.ballon_img_list.size() - 3)) + 1;
+                this.balloons.add(new Balloon());
+                //System.out.println("Wylosowano maplke : " + rand_balloon_index);
             }
         }
     }
@@ -122,7 +124,9 @@ public class GameLoop extends AnimationTimer {
 
         for(int i = 0; i < this.currentMaxBalloonsAllowed; i++)
         {
-            this.balloons.add(new Balloon(drawBalloonIndexBasedOnWeight()));
+            int index = drawBalloonIndexBasedOnWeight();
+            this.balloons.add(new Balloon(index));
+            System.out.println("Wylosowano index: " + index);
         }
 
         int delay = 0;
@@ -162,14 +166,21 @@ public class GameLoop extends AnimationTimer {
         while(iterator.hasNext())
         {
             Balloon balloon = iterator.next();
-            if(checkIfBallonReachedFinish(balloon) || balloonHasNoMoreLives(balloon))
+            if(checkIfBallonReachedFinish(balloon))
             {
                 clearBalloon(balloon);
+                AppConstans.gameState.loseLife(balloon.getBalloonLives());
+                iterator.remove();
+            }
+            if(balloonHasNoMoreLives(balloon))
+            {
+                clearBalloon(balloon);
+                AppConstans.gameState.addCoin();
                 iterator.remove();
             }
             //check if balloon got hit
             modifyBalloonsPosition(balloon);
-            //checkIfBalloonInRangeOfTower(balloon);
+            checkIfBalloonInRangeOfTower(balloon);
             //System.out.println("goes throught wave");
         }
 
@@ -185,7 +196,7 @@ public class GameLoop extends AnimationTimer {
     }
 
     private boolean balloonHasNoMoreLives(Balloon balloon) {
-        return balloon.getBallonLives() <= 0;
+        return balloon.getBalloonLives() <= 0;
     }
 
     public void modifyBalloonsPosition(Balloon balloon)
@@ -204,27 +215,8 @@ public class GameLoop extends AnimationTimer {
     {
         for(DeffenceTower tower : AppConstans.boughtTowers)
         {
-            tower.manageHitting(balloon);
+            tower.manageHitting(balloon, gameController.getMapPane());
             updateTowerAngle();
-            //jest tower jest darttower to musimy przejsc przez kazda list dart
-            //dodac je do map pane i wykonac animacje, usuwamy tez ktore sa finished, a zaczynamy animacje
-            //tych ktore nie sa finisjed
-            if(((DartTower) tower).getDarts() != null && !((DartTower) tower).getDarts().isEmpty()) {
-                Iterator<Dart> iterator = ((DartTower) tower).getDarts().iterator();
-                while (iterator.hasNext()) {
-                    Dart dart = iterator.next();
-                    if (!dart.isFinished()) {
-                        if (!gameController.mapPane.getChildren().contains(dart.getDartImage())) {
-                            //dart.setRotate(((DartTower) tower).getAngle());
-                            gameController.mapPane.getChildren().add(dart.getDartImage());
-                        }
-                        dart.throwDart(balloon);
-                    } else {
-                        gameController.mapPane.getChildren().remove(dart.getDartImage());
-                        iterator.remove();
-                    }
-                }
-            }
         }
     }
 
@@ -259,7 +251,6 @@ public class GameLoop extends AnimationTimer {
     public void clearBalloon(Balloon balloon)
     {
         gameController.removeBalloonFromMapPane(balloon);
-        AppConstans.gameState.loseLife(balloon.getBallonLives());
         updateGameInfo();
     }
 

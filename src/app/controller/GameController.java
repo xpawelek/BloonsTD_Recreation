@@ -356,7 +356,7 @@ public class GameController {
 
                 DartTower tower = new DartTower(e.getX() - centerX, e.getY() - centerY);
                 AppConstans.boughtTowers.add(tower);
-                //AppConstans.gameState.updateMoneyAfterBuying(tower.getPrice());
+                AppConstans.gameState.updateMoneyAfterBuying(tower.getPrice());
                 System.out.println("dodano tower");
 
                 cancelPlacing();

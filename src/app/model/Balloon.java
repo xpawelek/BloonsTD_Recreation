@@ -1,9 +1,7 @@
 package app.model;
 
 import app.utils.AppConstans;
-import javafx.animation.AnimationTimer;
 import javafx.animation.PathTransition;
-import javafx.animation.Timeline;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.LineTo;
@@ -12,7 +10,6 @@ import javafx.scene.shape.Path;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class Balloon {
@@ -43,13 +40,13 @@ public class Balloon {
         ballon_img.setImage(new Image(imagePath));
     }
 
-    public int getBallonLives()
+    public int getBalloonLives()
     {
         return ballon_lives;
     }
 
 
-    public void updateBallonLives()
+    public void updateBalloonLives()
     {
         ballon_lives--;
         if(ballon_lives <= 0)
@@ -71,14 +68,12 @@ public class Balloon {
             path.getElements().add(new LineTo(point.getKey(), point.getValue()));
         }
 
-
         PathTransition pathTransition = new PathTransition();
         pathTransition.setPath(path);
         pathTransition.setDuration(Duration.seconds(ballon_speed));
-        pathTransition.setCycleCount(1); //1
+        pathTransition.setCycleCount(1);
         pathTransition.setNode(getImageView());
         pathTransition.play();
-        //finish reached?
     }
 
     public void setBalloonPositionX(double balloonPositionX)
