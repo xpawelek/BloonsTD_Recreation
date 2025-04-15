@@ -81,7 +81,7 @@
     -fx-pref-height: 60;
     -fx-scale-x: 0.95;
     -fx-scale-y: 0.95;
-    -fx-background-size: contain;
+    -fx-background-size: 90% 90%;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-transition: all 0.5s;
@@ -98,6 +98,16 @@
 #dartDefender
 {
     -fx-background-image: url("/app/view/assets/images/dart_defender_icon.png");
+}
+
+#iceDefender
+{
+    -fx-background-image: url("/app/view/assets/images/ice_tower_icon.jpg");
+}
+
+#tackDefender
+{
+    -fx-background-image: url("/app/view/assets/images/tack_defender_icon.jpg");
 }
 
 .upgrades

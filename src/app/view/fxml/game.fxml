@@ -42,6 +42,8 @@
             <Label text="Defense Towers" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
             <FlowPane fx:id="towersBoard" GridPane.rowIndex="5"  hgap="10" vgap="10">
                 <Button fx:id="dartDefender" onMouseClicked="#defenderIconClickedOnBoard"/>
+                <Button fx:id="tackDefender" onMouseClicked="#defenderIconClickedOnBoard"/>
+                <Button fx:id="iceDefender" onMouseClicked="#defenderIconClickedOnBoard"/>
             </FlowPane>
             <FlowPane fx:id="towerModifyBoard" GridPane.rowIndex="5" GridPane.columnIndex="0" alignment="TOP_CENTER" hgap="5" vgap="10">
                 <Button fx:id="firstUpgrade" text="100"></Button>

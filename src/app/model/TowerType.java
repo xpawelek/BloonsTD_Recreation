@@ -3,11 +3,13 @@ package app.model;
 import java.util.function.Supplier;
 
 public enum TowerType {
-    DART(DartTower::new);
+    DART(DartTower::new),
+    ICE(IceTower::new),
+    TACK(TackTower::new);
 
-    private final Supplier<DartTower> constructor;
+    private final Supplier<DeffenceTower> constructor;
 
-    TowerType(Supplier<DartTower>constructor) {
+    TowerType(Supplier<DeffenceTower>constructor) {
         this.constructor = constructor;
     }
 

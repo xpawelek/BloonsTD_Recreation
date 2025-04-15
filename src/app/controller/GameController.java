@@ -42,6 +42,8 @@ public class GameController {
     public Button sellTower;
     public Button firstUpgrade;
     public Button secondUpgrade;
+    public Button tackDefender;
+    public Button iceDefender;
     @FXML private Button goBack;
     @FXML private ImageView backgroundGameImage;
     @FXML private GridPane gridPane;
@@ -60,11 +62,16 @@ public class GameController {
         towerModifyBoard.setVisible(false);
 
         dartDefender.getStyleClass().add("defense-button");
+        iceDefender.getStyleClass().add("defense-button");
+        tackDefender.getStyleClass().add("defense-button");
         panelContainer.getStyleClass().add("panel-container");
         sideGamePanel.getStyleClass().add("side-game-panel");
         firstUpgrade.getStyleClass().add("upgrades");
         secondUpgrade.getStyleClass().add("upgrades");
+
         dartDefender.setUserData(TowerType.DART);
+        tackDefender.setUserData(TowerType.TACK);
+        iceDefender.setUserData(TowerType.ICE);
 
         PauseTransition pause = new PauseTransition(Duration.millis(50));
         pause.setOnFinished(event -> {
