@@ -1,9 +1,6 @@
 package app.controller;
 
-import app.model.Balloon;
-import app.model.DartTower;
-import app.model.DeffenceTower;
-import app.model.GameLoop;
+import app.model.*;
 import app.utils.AppConstans;
 import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
@@ -67,7 +64,7 @@ public class GameController {
         sideGamePanel.getStyleClass().add("side-game-panel");
         firstUpgrade.getStyleClass().add("upgrades");
         secondUpgrade.getStyleClass().add("upgrades");
-
+        dartDefender.setUserData(TowerType.DART);
 
         PauseTransition pause = new PauseTransition(Duration.millis(50));
         pause.setOnFinished(event -> {
@@ -198,10 +195,15 @@ public class GameController {
             return;
         }
 
-        int range = 100;
-        rangeCircle = new Circle(range);
         selectedTower = (ImageView)event.getSource();
         AppConstans.currentClickedDeffenceTower = (DeffenceTower) selectedTower.getUserData();
+
+        int range = AppConstans.currentClickedDeffenceTower.getRange();
+        rangeCircle = new Circle(range);
+
+        firstUpgrade.setStyle("-fx-background-image: url('" + AppConstans.currentClickedDeffenceTower.getFirstUpgradeImage() + "');");
+        secondUpgrade.setStyle("-fx-background-image: url('" + AppConstans.currentClickedDeffenceTower.getSecondUpgradeImage() + "');");
+
         towersBoard.setVisible(false);
         towerModifyBoard.setVisible(true);
 
@@ -239,6 +241,27 @@ public class GameController {
             towerModifyBoard.setVisible(false);
         });
 
+        firstUpgrade.setOnMouseClicked(e -> {
+            if(AppConstans.gameState.getMoney() < AppConstans.currentClickedDeffenceTower.getFirstUpgradePrice()
+            || AppConstans.currentClickedDeffenceTower.isFirstUpgradeBought())
+                return;
+
+            AppConstans.currentClickedDeffenceTower.manageFirstUpgrade();
+            rangeCircle.setRadius(AppConstans.currentClickedDeffenceTower.getRange());
+            //check if enough money + buy + add more worth
+            //AppConstans.currentClickedDeffenceTower.setNewRange(150);
+        });
+
+        secondUpgrade.setOnMouseClicked(e -> {
+            //check if enough money + buy + add more worth
+            if(AppConstans.gameState.getMoney() < AppConstans.currentClickedDeffenceTower.getSecondUpgradePrice()
+            || AppConstans.currentClickedDeffenceTower.isSecondUpgradeBought())
+                return;
+
+            AppConstans.currentClickedDeffenceTower.manageSecondUpgrade();
+            rangeCircle.setRadius(AppConstans.currentClickedDeffenceTower.getRange());
+        });
+
     }
 
     private void cancelPlacing()
@@ -255,13 +278,18 @@ public class GameController {
         }
     }
 
-    public void defenderClicked(MouseEvent mouseEvent) {
-        //not only dart tower and worth to improve - creating full object
-        if(new DartTower().getPrice() > AppConstans.gameState.getMoney()){
+    public void defenderIconClickedOnBoard(MouseEvent mouseEvent) {
+
+        TowerType type = (TowerType) ((Node) mouseEvent.getSource()).getUserData();
+        DeffenceTower clickedTower = type.create();
+
+        if(clickedTower.getPriceValue() > AppConstans.gameState.getMoney()){
             return;
         }
 
-        String id = (String) ((Node) mouseEvent.getSource()).getId();
+        System.out.println(clickedTower.getPriceValue());
+        System.out.println(clickedTower.getTowerImagePath());
+
         AtomicBoolean canPlace = new AtomicBoolean(false);
 
         if(placingTower)
@@ -273,14 +301,15 @@ public class GameController {
         mapPane.getChildren().remove(rangeCircle);
         placingTower = true;
 
-        Image dartImage = new Image(getClass().getResource("/app/view/assets/images/" + id + ".png").toExternalForm());
-        ImageView ghostMonkey = new ImageView(dartImage);
+        System.out.println(clickedTower.getTowerImagePath());
+        Image towerImage = new Image(getClass().getResource(clickedTower.getTowerImagePath()).toExternalForm());
+        ImageView ghostMonkey = new ImageView(towerImage);
         ghostMonkey.setOpacity(0.8);
         ghostMonkey.setMouseTransparent(true);
 
-        double centerX = dartImage.getWidth() / 2;
-        double centerY = dartImage.getHeight() / 2;
-        double range = 100;
+        double centerX = towerImage.getWidth() / 2;
+        double centerY = towerImage.getHeight() / 2;
+        double range = clickedTower.getRange();
         int roadWidth = 50;
 
         rangeCircle = new Circle(range);
@@ -358,9 +387,10 @@ public class GameController {
                 // monkey.setMouseTransparent(false);
                 // mapPane.getChildren().add(monkey);
 
-                DartTower tower = new DartTower(e.getX() - centerX, e.getY() - centerY);
-                AppConstans.boughtTowers.add(tower);
-                AppConstans.gameState.updateMoneyAfterBuying(tower.getPrice());
+                clickedTower.setPositionX(e.getX() - centerX);
+                clickedTower.setPositionY(e.getY() - centerY);
+                AppConstans.boughtTowers.add(clickedTower);
+                AppConstans.gameState.updateMoneyAfterBuying(clickedTower.getPriceValue());
                 System.out.println("dodano tower");
 
                 cancelPlacing();

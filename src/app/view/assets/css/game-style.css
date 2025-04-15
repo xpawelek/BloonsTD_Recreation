@@ -100,17 +100,6 @@
     -fx-background-image: url("/app/view/assets/images/dart_defender_icon.png");
 }
 
-#firstUpgrade
-{
-    -fx-background-image: url("/app/view/assets/images/dart_tower_first_upgrade.png");
-}
-
-#secondUpgrade
-{
-    -fx-background-image: url("/app/view/assets/images/dart_tower_second_upgrade.png");
-}
-
-
 .upgrades
 {
     -fx-font-size: 15;

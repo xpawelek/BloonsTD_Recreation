@@ -286,6 +286,33 @@ public class GameLoop extends AnimationTimer {
         }
     }
 
+    void checkPossibilityOfBuyingUpgrades()
+    {
+        if(AppConstans.boughtTowers.size() == 0 || AppConstans.currentClickedDeffenceTower == null) {
+            return;
+        }
+
+        if(AppConstans.currentClickedDeffenceTower.isFirstUpgradeBought()
+                || AppConstans.gameState.getMoney() < AppConstans.currentClickedDeffenceTower.getFirstUpgradePrice())
+        {
+            gameController.firstUpgrade.setDisable(true);
+        }
+        else
+        {
+            gameController.firstUpgrade.setDisable(false);
+        }
+
+        if(AppConstans.currentClickedDeffenceTower.isSecondUpgradeBought()
+                || AppConstans.gameState.getMoney() < AppConstans.currentClickedDeffenceTower.getSecondUpgradePrice())
+        {
+            gameController.secondUpgrade.setDisable(true);
+        }
+        else
+        {
+            gameController.secondUpgrade.setDisable(false);
+        }
+    }
+
 
     @Override
     public void handle(long now)
@@ -294,6 +321,7 @@ public class GameLoop extends AnimationTimer {
             updateGameInfo();
             addTower();
             manageTower();
+            checkPossibilityOfBuyingUpgrades();
             if(AppConstans.gameState.getRoundContinues()) {
                 //System.out.println("round goes");
                 if(!isAnyLifeLeft())

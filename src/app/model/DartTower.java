@@ -1,5 +1,6 @@
 package app.model;
 
+import app.utils.AppConstans;
 import javafx.animation.PauseTransition;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
@@ -11,20 +12,29 @@ import java.util.List;
 import java.util.Optional;
 
 public class DartTower extends DeffenceTower {
-    private int range = 100;
     private double angle = -1;
     private long lastShotTime = 0;
     private long fire_cooldown = 600;
     private List<Balloon> balloonsInRange = new ArrayList<>();
 
     public DartTower() {
-        price = 300;
+        init();
     }
 
     public DartTower(double positionX, double positionY) {
         super(positionX, positionY);
-        towerImg = new ImageView("/app/view/assets/images/dartDefender.png");
-        price = 300;
+        init();
+    }
+
+    private void init() {
+        towerImagePath = "/app/view/assets/images/dartDefender_tower.png";
+        towerImg = new ImageView(towerImagePath);
+        firstUpgradeImagePath = "/app/view/assets/images/dart_tower_first_upgrade.png";
+        secondUpgradeImagePath = "/app/view/assets/images/dart_tower_second_upgrade.png";
+        priceValue = 300;
+        firstUpgradePrice = 100;
+        secondUpgradePrice = 150;
+        range = 100;
     }
 
     @Override
@@ -82,6 +92,22 @@ public class DartTower extends DeffenceTower {
         pause.play();
 
         lastShotTime = now;
+    }
+
+    public void manageFirstUpgrade()
+    {
+        this.priceValue += getFirstUpgradePrice();
+        this.setFirstUpgradeBought();
+        AppConstans.gameState.updateMoneyAfterBuying(getFirstUpgradePrice());
+    }
+
+    public void manageSecondUpgrade()
+    {
+        this.priceValue += getSecondUpgradePrice();
+        this.setSecondUpgradeBought();
+        AppConstans.gameState.updateMoneyAfterBuying(getSecondUpgradePrice());
+
+        this.range = 130;
     }
 
     public double getAngle()
