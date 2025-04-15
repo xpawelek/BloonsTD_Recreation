@@ -1,7 +1,9 @@
 package app.model;
 
+import javafx.animation.PauseTransition;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -12,7 +14,7 @@ public class DartTower extends DeffenceTower {
     private int range = 100;
     private double angle = -1;
     private long lastShotTime = 0;
-    private long fire_cooldown = 800;
+    private long fire_cooldown = 600;
     private List<Balloon> balloonsInRange = new ArrayList<>();
 
     public DartTower() {
@@ -64,13 +66,20 @@ public class DartTower extends DeffenceTower {
 
         Dart dart = new Dart(super.positionX, super.positionY, balloon.getBalloonPositionX(), balloon.getBalloonPositionY());
         dart.setDartStartingPosition(super.positionX, super.positionY, towerImg.getFitWidth(), towerImg.getFitHeight());
-        dart.setRotate(angle + 90);
+        towerImg.setRotate(angle + 90);
 
         if (!mapPane.getChildren().contains(dart.getDartImage())) {
             mapPane.getChildren().add(dart.getDartImage());
         }
 
-        dart.throwDart(b, mapPane);
+        PauseTransition pause = new PauseTransition(Duration.millis(5));
+        Balloon finalB = b;
+
+        pause.setOnFinished(event -> {
+            dart.setRotate(angle + 90);
+            dart.throwDart(finalB, mapPane);
+        });
+        pause.play();
 
         lastShotTime = now;
     }

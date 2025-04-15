@@ -49,7 +49,7 @@ public abstract class DeffenceTower {
 
     public void sellingTower()
     {
-        //AppConstans.gameState.updateMoneyAfterBuying(); chcemy dodac rownowartosc 80% wartosci malpy
+        AppConstans.gameState.updateMoneyAfterSelling((int)(this.getPrice() * 0.8));
     }
 
     public boolean getSellTower(){

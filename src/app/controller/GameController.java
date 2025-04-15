@@ -43,6 +43,8 @@ public class GameController {
     public FlowPane towersBoard;
     public FlowPane towerModifyBoard;
     public Button sellTower;
+    public Button firstUpgrade;
+    public Button secondUpgrade;
     @FXML private Button goBack;
     @FXML private ImageView backgroundGameImage;
     @FXML private GridPane gridPane;
@@ -63,6 +65,8 @@ public class GameController {
         dartDefender.getStyleClass().add("defense-button");
         panelContainer.getStyleClass().add("panel-container");
         sideGamePanel.getStyleClass().add("side-game-panel");
+        firstUpgrade.getStyleClass().add("upgrades");
+        secondUpgrade.getStyleClass().add("upgrades");
 
 
         PauseTransition pause = new PauseTransition(Duration.millis(50));
@@ -142,13 +146,13 @@ public class GameController {
     public double getPositionX(Balloon balloon)
     {
         Bounds bounds = balloon.getImageView().localToScene(balloon.getImageView().getBoundsInLocal());
-        return bounds.getCenterX();
+        return bounds.getMinX() + bounds.getWidth() / 2.0;
     }
 
     public double getPositionY(Balloon balloon)
     {
         Bounds bounds = balloon.getImageView().localToScene(balloon.getImageView().getBoundsInLocal());
-        return bounds.getCenterY();
+        return bounds.getMinY() + bounds.getHeight() / 2.0;
     }
 
     public void addTowerToMapPane(DeffenceTower deffenceTower)

@@ -36,6 +36,11 @@ public class GameState {
         this.money -= money;
     }
 
+    public void updateMoneyAfterSelling(int money)
+    {
+        this.money += money;
+    }
+
     public boolean getGameContinues()
     {
         return gameContinues;

@@ -52,11 +52,11 @@
 }
 
 #sellTower{
-    -fx-padding: 5 10;
-    -fx-text-fill: #FF2800;
+    -fx-padding: 7 15;
     -fx-border-color: #FF2800;
-    -fx-border-width: 2px;
+    -fx-border-width: 1px;
     -fx-border-style: solid;
+    -fx-text-fill: #FF2800;
     -fx-background-color: #2C2C2C;
     -fx-background-color: rgba(44, 44, 44, 0.85);
     -fx-scale-x: 0.95;
@@ -66,7 +66,8 @@
 
 #sellTower:hover
 {
-    -fx-effect: dropshadow(gaussian, #FF2800, 2, 0.2, 0, 0);
+    -fx-border-color: #FF2800;
+    -fx-border-width: 2px;
     -fx-scale-x: 1;
     -fx-scale-y: 1;
 }
@@ -97,4 +98,39 @@
 #dartDefender
 {
     -fx-background-image: url("/app/view/assets/images/dart_defender_icon.png");
+}
+
+#firstUpgrade
+{
+    -fx-background-image: url("/app/view/assets/images/dart_tower_first_upgrade.png");
+}
+
+#secondUpgrade
+{
+    -fx-background-image: url("/app/view/assets/images/dart_tower_second_upgrade.png");
+}
+
+
+.upgrades
+{
+    -fx-font-size: 15;
+    -fx-text-fill: white;
+    -fx-padding: 45 30;
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-border-radius: 5;
+    -fx-scale-x: 0.95;
+    -fx-scale-y: 0.95;
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 80% 70%;
+    -fx-background-insets: 5;
+    -fx-background-position: center;
+}
+
+.upgrades:hover
+{
+    -fx-border-color: white;
+    -fx-border-width: 2;
+    -fx-border-radius: 5;
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
 }

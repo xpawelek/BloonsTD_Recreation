@@ -216,7 +216,7 @@ public class GameLoop extends AnimationTimer {
         for(DeffenceTower tower : AppConstans.boughtTowers)
         {
             tower.manageHitting(balloon, gameController.getMapPane());
-            updateTowerAngle();
+            //updateTowerAngle();
         }
     }
 
@@ -279,6 +279,7 @@ public class GameLoop extends AnimationTimer {
                 gameController.removeTowerFromMapPane(AppConstans.currentClickedDeffenceTower);
                 AppConstans.boughtTowers.remove(AppConstans.currentClickedDeffenceTower);
                 AppConstans.currentClickedDeffenceTower.setSellTower();
+                AppConstans.currentClickedDeffenceTower.sellingTower();
                 AppConstans.currentClickedDeffenceTower = null;
                 System.out.println("removing, left: " + AppConstans.boughtTowers.size());
             }

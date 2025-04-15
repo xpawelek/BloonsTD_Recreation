@@ -30,7 +30,7 @@ public class Dart {
 
         double vx = dx / distance;
         double vy = dy / distance;
-        double speed = 5;
+        double speed = 6;
 
         Timeline timeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(Duration.millis(16), event -> {
