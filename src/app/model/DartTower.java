@@ -99,6 +99,9 @@ public class DartTower extends DeffenceTower {
         this.priceValue += getFirstUpgradePrice();
         this.setFirstUpgradeBought();
         AppConstans.gameState.updateMoneyAfterBuying(getFirstUpgradePrice());
+
+        this.fire_cooldown *= 0.8;
+        //todo: pierce more balloons
     }
 
     public void manageSecondUpgrade()
@@ -113,6 +116,16 @@ public class DartTower extends DeffenceTower {
     public double getAngle()
     {
         return angle;
+    }
+
+    public void setAngle(double angle)
+    {
+
+    }
+
+    public void clearBalloonsInRange()
+    {
+        balloonsInRange.clear();
     }
 
     //to do - piercing more + range

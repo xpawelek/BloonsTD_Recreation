@@ -8,6 +8,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Optional;
+
 public class Dart {
     private final ImageView dartImage;
     private double speed, towerPositionX, towerPositionY, targetPositionX, targetPositionY;
@@ -22,7 +29,6 @@ public class Dart {
         this.targetPositionY = targetPositionY;
     }
 
-    //list of ballons? piercing throught them and then stop animation
     public void throwDart(Balloon balloon, Pane mapPane) {
         double dx = targetPositionX - towerPositionX;
         double dy = targetPositionY - towerPositionY;
