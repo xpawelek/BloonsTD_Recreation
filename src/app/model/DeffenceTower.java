@@ -23,12 +23,16 @@ public abstract class DeffenceTower {
     protected boolean firstUpgrade = false;
     protected boolean secondUpgrade = false;
     protected List<Balloon> balloonsInRange = new ArrayList<>();
+    private double towerMiddleX;
+    private double towerMiddleY;
 
     public DeffenceTower() {}
     public DeffenceTower(double positionX, double positionY)
     {
         this.positionX = positionX;
         this.positionY = positionY;
+        towerMiddleX = getTowerX() + getTowerImg().getFitWidth() / 2.0;
+        towerMiddleY = getTowerY() + getTowerImg().getFitHeight() / 2.0;
     }
 
     public ImageView getTowerImg(){
@@ -135,8 +139,15 @@ public abstract class DeffenceTower {
 
     public Balloon balloonInRange(Balloon balloon)
     {
-        double dx = getTowerX() - balloon.getBalloonPositionX();
-        double dy = getTowerY() - balloon.getBalloonPositionY();
+        double towerX = getTowerX() + getTowerImg().getFitWidth() / 2.0;
+        double towerY = getTowerY() + getTowerImg().getFitHeight() / 2.0;
+
+        double balloonX = balloon.getBalloonPositionX();
+        double balloonY = balloon.getBalloonPositionY();
+
+        double dx = towerX - balloonX;
+        double dy = towerY - balloonY;
+
         if(dx * dx + dy * dy <= range * range)
         {
             if(!balloonsInRange.contains(balloon))
@@ -148,10 +159,16 @@ public abstract class DeffenceTower {
 
     public boolean balloonStillInRange(Balloon balloon)
     {
-        double dx = getTowerX() - balloon.getBalloonPositionX();
-        double dy = getTowerY() - balloon.getBalloonPositionY();
-        System.out.println(balloon.getBalloonPositionX() + "," + balloon.getBalloonPositionY());
-        return dx * dx + dy * dy <= (range + range * 0.2) * (range + range * 0.2);
+        double towerX = getTowerX() + getTowerImg().getFitWidth() / 2.0;
+        double towerY = getTowerY() + getTowerImg().getFitHeight() / 2.0;
+
+        double balloonX = balloon.getBalloonPositionX();
+        double balloonY = balloon.getBalloonPositionY();
+
+        double dx = towerX - balloonX;
+        double dy = towerY - balloonY;
+
+        return dx * dx + dy * dy <= (range + range * 0.1) * (range + range * 0.1);
     }
 
     public ImageView getImageView()

@@ -61,9 +61,6 @@ public class DartTower extends DeffenceTower {
         angle = Math.toDegrees(Math.atan2(getTowerY() - b.getBalloonPositionY(), getTowerX() - b.getBalloonPositionX()));
 
         Dart dart = new Dart(super.positionX, super.positionY, balloon.getBalloonPositionX(), balloon.getBalloonPositionY());
-        dart.setDartStartingPosition(super.positionX, super.positionY, towerImg.getFitWidth(), towerImg.getFitHeight());
-        towerImg.setRotate(angle + 90);
-
         if (!mapPane.getChildren().contains(dart.getDartImage())) {
             mapPane.getChildren().add(dart.getDartImage());
         }
@@ -72,6 +69,8 @@ public class DartTower extends DeffenceTower {
         Balloon finalB = b;
 
         pause.setOnFinished(event -> {
+            dart.setDartStartingPosition(super.positionX, super.positionY, towerImg.getFitWidth(), towerImg.getFitHeight());
+            towerImg.setRotate(angle + 90);
             dart.setRotate(angle + 90);
             dart.throwDart(finalB, mapPane);
         });

@@ -7,6 +7,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 
 import java.util.*;
@@ -205,6 +207,10 @@ public class GameLoop extends AnimationTimer {
     {
         balloon.setBalloonPositionX(gameController.getPositionX(balloon));
         balloon.setBalloonPositionY(gameController.getPositionY(balloon));
+
+        Circle debugPoint = new Circle(balloon.getBalloonPositionX(), balloon.getBalloonPositionY(), 1); // mała kropka
+        debugPoint.setFill(Color.RED); // np. czerwony środek wieżyczki
+        gameController.mapPane.getChildren().add(debugPoint);
     }
 
     public boolean checkIfBallonReachedFinish(Balloon balloon)
@@ -219,6 +225,9 @@ public class GameLoop extends AnimationTimer {
         {
 
             tower.manageHitting(balloon, gameController.getMapPane());
+            Circle debugPoint = new Circle(tower.getTowerX(), tower.getTowerY(), 1); // mała kropka
+            debugPoint.setFill(Color.RED); // np. czerwony środek wieżyczki
+            gameController.mapPane.getChildren().add(debugPoint);
             //updateTowerAngle();
         }
     }

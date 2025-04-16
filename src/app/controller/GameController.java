@@ -126,7 +126,8 @@ public class GameController {
     {
         //gridPane.getChildren().add(balloon.getImageView());
         //gridPane.add(balloon.getImageView(), 0,0);
-        mapPane.getChildren().add(balloon.getImageView());
+        if(balloon.getImageView() != null)
+            mapPane.getChildren().add(balloon.getImageView());
         /*
         System.out.println("Dzieci gridPane:");
         for (Node node : gridPane.getChildren()) {
@@ -148,13 +149,19 @@ public class GameController {
     }
 
     public double getPositionX(Balloon balloon) {
-        Bounds bounds = balloon.getImageView().getBoundsInParent(); // ← zamiast localToScene
-        return bounds.getMinX() + bounds.getWidth() / 2.0;
+        if(balloon.getImageView() != null) {
+            Bounds bounds = balloon.getImageView().getBoundsInParent();
+            return bounds.getMinX() + bounds.getWidth() / 2.0;
+        }
+        return -1;
     }
 
     public double getPositionY(Balloon balloon) {
-        Bounds bounds = balloon.getImageView().getBoundsInParent(); // ← zamiast localToScene
-        return bounds.getMinY() + bounds.getHeight() / 2.0;
+        if(balloon.getImageView() != null) {
+            Bounds bounds = balloon.getImageView().getBoundsInParent();
+            return bounds.getMinY() + bounds.getHeight() / 2.0;
+        }
+        return -1;
     }
 
     public void addTowerToMapPane(DeffenceTower deffenceTower)

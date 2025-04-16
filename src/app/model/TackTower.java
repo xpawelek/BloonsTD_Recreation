@@ -15,7 +15,7 @@ import java.util.*;
 
 public class TackTower extends DeffenceTower {
     private long lastShotTime = 0;
-    private long fire_cooldown = 4000;
+    private long fire_cooldown = 3000;
     private String towerImageGifPath;
 
     public TackTower() {
@@ -45,6 +45,7 @@ public class TackTower extends DeffenceTower {
     public void manageHitting(Balloon balloon, Pane mapPane)
     {
         balloonInRange(balloon);
+        System.out.println(balloonsInRange.size());
         long now = System.currentTimeMillis();
 
         if(now - lastShotTime < fire_cooldown)
@@ -78,7 +79,7 @@ public class TackTower extends DeffenceTower {
         this.setFirstUpgradeBought();
         AppConstans.gameState.updateMoneyAfterBuying(getFirstUpgradePrice());
 
-        this.fire_cooldown = 2800;
+        this.fire_cooldown = 2000;
     }
 
     public void manageSecondUpgrade()
