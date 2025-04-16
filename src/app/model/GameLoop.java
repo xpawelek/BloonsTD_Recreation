@@ -5,6 +5,8 @@ import app.utils.AppConstans;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 import java.util.*;
@@ -215,6 +217,7 @@ public class GameLoop extends AnimationTimer {
     {
         for(DeffenceTower tower : AppConstans.boughtTowers)
         {
+
             tower.manageHitting(balloon, gameController.getMapPane());
             //updateTowerAngle();
         }

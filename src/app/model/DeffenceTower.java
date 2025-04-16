@@ -4,6 +4,7 @@ import app.utils.AppConstans;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class DeffenceTower {
@@ -21,6 +22,7 @@ public abstract class DeffenceTower {
     protected int secondUpgradePrice;
     protected boolean firstUpgrade = false;
     protected boolean secondUpgrade = false;
+    protected List<Balloon> balloonsInRange = new ArrayList<>();
 
     public DeffenceTower() {}
     public DeffenceTower(double positionX, double positionY)
@@ -131,7 +133,32 @@ public abstract class DeffenceTower {
         secondUpgrade = true;
     }
 
-    public abstract Balloon balloonInRange(Balloon balloon);
+    public Balloon balloonInRange(Balloon balloon)
+    {
+        double dx = getTowerX() - balloon.getBalloonPositionX();
+        double dy = getTowerY() - balloon.getBalloonPositionY();
+        if(dx * dx + dy * dy <= range * range)
+        {
+            if(!balloonsInRange.contains(balloon))
+                balloonsInRange.add(balloon);
+            return balloon;
+        }
+        return null;
+    }
+
+    public boolean balloonStillInRange(Balloon balloon)
+    {
+        double dx = getTowerX() - balloon.getBalloonPositionX();
+        double dy = getTowerY() - balloon.getBalloonPositionY();
+        System.out.println(balloon.getBalloonPositionX() + "," + balloon.getBalloonPositionY());
+        return dx * dx + dy * dy <= (range + range * 0.2) * (range + range * 0.2);
+    }
+
+    public ImageView getImageView()
+    {
+        return towerImg;
+    }
+
     public abstract void manageHitting(Balloon balloon, Pane mapPane);
     public abstract void manageFirstUpgrade();
     public abstract void manageSecondUpgrade();

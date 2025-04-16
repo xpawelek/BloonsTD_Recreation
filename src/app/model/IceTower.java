@@ -43,7 +43,24 @@ public class IceTower extends DeffenceTower {
 
     @Override
     public void manageHitting(Balloon balloon, Pane mapPane) {
-        System.out.println(balloon);
+        balloonInRange(balloon);
+        System.out.println(balloonsInRange.size() + " balloons in range");
+        long now = System.currentTimeMillis();
+
+        if(now - lastShotTime < fire_cooldown)
+            return;
+
+        System.out.println(balloonsInRange.size() + "w zasiegu");
+
+
+        for(Balloon b : balloonsInRange)
+        {
+            //change speed
+        }
+
+        balloonsInRange.clear();
+
+        lastShotTime = now;
     }
 
     @Override

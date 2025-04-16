@@ -147,15 +147,13 @@ public class GameController {
         //po zmianie image nie wiadomo czy nie inny sposob usuniecia np po id
     }
 
-    public double getPositionX(Balloon balloon)
-    {
-        Bounds bounds = balloon.getImageView().localToScene(balloon.getImageView().getBoundsInLocal());
+    public double getPositionX(Balloon balloon) {
+        Bounds bounds = balloon.getImageView().getBoundsInParent(); // ← zamiast localToScene
         return bounds.getMinX() + bounds.getWidth() / 2.0;
     }
 
-    public double getPositionY(Balloon balloon)
-    {
-        Bounds bounds = balloon.getImageView().localToScene(balloon.getImageView().getBoundsInLocal());
+    public double getPositionY(Balloon balloon) {
+        Bounds bounds = balloon.getImageView().getBoundsInParent(); // ← zamiast localToScene
         return bounds.getMinY() + bounds.getHeight() / 2.0;
     }
 

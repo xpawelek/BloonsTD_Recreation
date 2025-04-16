@@ -15,7 +15,6 @@ public class DartTower extends DeffenceTower {
     private double angle = -1;
     private long lastShotTime = 0;
     private long fire_cooldown = 600;
-    private List<Balloon> balloonsInRange = new ArrayList<>();
 
     public DartTower() {
         init();
@@ -35,19 +34,6 @@ public class DartTower extends DeffenceTower {
         firstUpgradePrice = 100;
         secondUpgradePrice = 150;
         range = 100;
-    }
-
-    @Override
-    public Balloon balloonInRange(Balloon balloon)
-    {
-        double dx = getTowerX() - balloon.getBalloonPositionX();
-        double dy = getTowerY() - balloon.getBalloonPositionY();
-        if(dx * dx + dy * dy <= range * range)
-        {
-            balloonsInRange.add(balloon);
-            return balloon;
-        }
-        return null;
     }
 
     @Override

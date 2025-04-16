@@ -20,6 +20,13 @@ public class Dart {
     private double speed, towerPositionX, towerPositionY, targetPositionX, targetPositionY;
     private Timeline dartFireTimeline;
 
+    public Dart(double towerPositionX, double towerPositionY) {
+        dartImage = new ImageView(new Image("/app/view/assets/images/dart_image.png"));
+        speed = 0.5;
+        this.towerPositionX = towerPositionX;
+        this.towerPositionY = towerPositionY;
+    }
+
     public Dart(double towerPositionX, double towerPositionY, double targetPositionX, double targetPositionY) {
         dartImage = new ImageView(new Image("/app/view/assets/images/dart_image.png"));
         speed = 0.5;
@@ -76,4 +83,5 @@ public class Dart {
         dartImage.setX(towerX + towerWidth / 2 - dartWidth / 2);
         dartImage.setY(towerY + towerHeight / 2 - dartHeight / 2);
     }
+
 }
