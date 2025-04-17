@@ -26,6 +26,7 @@ public class Dart {
 
     public Dart(double towerPositionX, double towerPositionY, double targetPositionX, double targetPositionY) {
         this.dartImage = new ImageView(new Image("/app/view/assets/images/dart_image.png"));
+        this.dartImage.setOpacity(0);
         this.dartSpeed = 0.5;
         this.towerPositionX = towerPositionX;
         this.towerPositionY = towerPositionY;
@@ -48,6 +49,7 @@ public class Dart {
             double y = dartImage.getY() + vy * speed;
             dartImage.setX(x);
             dartImage.setY(y);
+            dartImage.setOpacity(1);
 
             if (Math.hypot(x - targetPositionX, y - targetPositionY) < 5) {
                 mapPane.getChildren().remove(dartImage);
