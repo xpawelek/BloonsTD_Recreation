@@ -29,7 +29,7 @@ public class TackTower extends DefenceTower {
         this.towerImg = new ImageView(towerImagePath);
         this.towerImg.setFitWidth(65);
         this.towerImg.setFitHeight(65);
-        this.priceValue = 300;
+        this.priceValue = 350;
         this.firstUpgradePrice = 100;
         this.secondUpgradePrice = 150;
         this.range = 80;

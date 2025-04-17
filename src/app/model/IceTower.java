@@ -35,7 +35,7 @@ public class IceTower extends DefenceTower {
         this.towerImg = new ImageView(towerImagePath);
         this.towerImg.setFitWidth(60);
         this.towerImg.setFitHeight(60);
-        this.priceValue = 300;
+        this.priceValue = 350;
         this.firstUpgradePrice = 100;
         this.secondUpgradePrice = 150;
         this.range = 120;
