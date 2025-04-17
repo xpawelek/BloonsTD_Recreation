@@ -14,8 +14,8 @@ public class GameLoop extends AnimationTimer {
     private int baseBalloonPower = 1;
     private int probabilityIndex = 0;
     private int currentMaxBalloonsAllowed = 5;
-    private List<Integer> currentBalloonsAllowed;
-    private List<Integer> ballonsPowerProbability;
+    private List<Integer> currentBalloonsAllowed = new ArrayList<>(List.of(baseBalloonPower));
+    private List<Integer> ballonsPowerProbability = new ArrayList<>(Collections.nCopies(AppConstans.ballon_img_list.size() - 1, 0));;
     private boolean turnOnProbability = false;
     private ArrayList<Balloon> balloons = new ArrayList<>();
     private final Random random = new Random();
@@ -25,8 +25,6 @@ public class GameLoop extends AnimationTimer {
     public GameLoop(GameController gameController) {
         this.gameController = gameController;
         this.ballonsPowerProbability.set(0, 100);
-        this.currentBalloonsAllowed = new ArrayList<>(List.of(baseBalloonPower));
-        this.ballonsPowerProbability = new ArrayList<>(Collections.nCopies(AppConstans.ballon_img_list.size() - 1, 0));
     }
     
     //game methods
