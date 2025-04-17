@@ -208,9 +208,9 @@ public class GameLoop extends AnimationTimer {
         balloon.setBalloonPositionX(gameController.getPositionX(balloon));
         balloon.setBalloonPositionY(gameController.getPositionY(balloon));
 
-        Circle debugPoint = new Circle(balloon.getBalloonPositionX(), balloon.getBalloonPositionY(), 1); // mała kropka
-        debugPoint.setFill(Color.RED); // np. czerwony środek wieżyczki
-        gameController.mapPane.getChildren().add(debugPoint);
+       // Circle debugPoint = new Circle(balloon.getBalloonPositionX(), balloon.getBalloonPositionY(), 1); // mała kropka
+       // debugPoint.setFill(Color.RED); // np. czerwony środek wieżyczki
+       // gameController.mapPane.getChildren().add(debugPoint);
     }
 
     public boolean checkIfBallonReachedFinish(Balloon balloon)
@@ -225,9 +225,9 @@ public class GameLoop extends AnimationTimer {
         {
 
             tower.manageHitting(balloon, gameController.getMapPane());
-            Circle debugPoint = new Circle(tower.getTowerX(), tower.getTowerY(), 1); // mała kropka
-            debugPoint.setFill(Color.RED); // np. czerwony środek wieżyczki
-            gameController.mapPane.getChildren().add(debugPoint);
+            //Circle debugPoint = new Circle(tower.getTowerX(), tower.getTowerY(), 1); // mała kropka
+            //debugPoint.setFill(Color.RED); // np. czerwony środek wieżyczki
+            //gameController.mapPane.getChildren().add(debugPoint);
             //updateTowerAngle();
         }
     }
@@ -248,6 +248,14 @@ public class GameLoop extends AnimationTimer {
         return this.balloons.isEmpty();
     }
 
+    public void clearTowers()
+    {
+        for(DeffenceTower tower : AppConstans.boughtTowers)
+        {
+            tower.clearAfterWave();
+        }
+    }
+
     public void clearBalloonsAfterWave()
     {
         for(Balloon balloon : balloons)
@@ -258,6 +266,12 @@ public class GameLoop extends AnimationTimer {
         AppConstans.gameState.setRoundContinues(false);
         this.balloons.clear();
         this.timelineBalloons.getKeyFrames().clear(); // <- musi byc clearoweane
+    }
+
+    public void clearAfterWave()
+    {
+        clearBalloonsAfterWave();
+        clearTowers();
     }
 
     public void clearBalloon(Balloon balloon)
@@ -359,7 +373,7 @@ public class GameLoop extends AnimationTimer {
         }
         else {
             //clear game loop elepments in class
-            clearBalloonsAfterWave();
+            clearAfterWave();
             AppConstans.boughtTowers.clear();
             stop();
         }

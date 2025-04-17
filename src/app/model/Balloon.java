@@ -2,6 +2,7 @@ package app.model;
 
 import app.utils.AppConstans;
 import javafx.animation.PathTransition;
+import javafx.animation.PauseTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.LineTo;
@@ -20,13 +21,17 @@ public class Balloon {
     private Path path = new Path();
     private double balloonPositionX;
     private double balloonPositionY;
+    private PathTransition pathTransition;
 
-    public Balloon() {}
+    public Balloon() {
+        pathTransition = new PathTransition();
+    }
     public Balloon(int ballon_lives) {
         this.ballon_lives = ballon_lives;
         this.ballon_speed =  new ArrayList<>(AppConstans.ballon_img_list.values()).get(ballon_lives);
         this.ballon_img = new ImageView(new ArrayList<>(AppConstans.ballon_img_list.keySet()).get(ballon_lives));
         this.ballon_img.setId("balloon");
+        pathTransition = new PathTransition();
         //this.ballon_img.setVisible(false); -> migajace balony ogarnac
         //this.ballon_img.setFitHeight(30);
         //this.ballon_img.setFitWidth(30);
@@ -68,11 +73,20 @@ public class Balloon {
             path.getElements().add(new LineTo(point.getKey(), point.getValue()));
         }
 
-        PathTransition pathTransition = new PathTransition();
         pathTransition.setPath(path);
         pathTransition.setDuration(Duration.seconds(ballon_speed));
         pathTransition.setCycleCount(1);
         pathTransition.setNode(getImageView());
+        pathTransition.play();
+    }
+
+    public void pauseMovingAnimation()
+    {
+        pathTransition.pause();
+    }
+
+    public void resumeMovingAnimation()
+    {
         pathTransition.play();
     }
 

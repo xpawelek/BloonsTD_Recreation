@@ -171,6 +171,11 @@ public abstract class DeffenceTower {
         return dx * dx + dy * dy <= (range + range * 0.1) * (range + range * 0.1);
     }
 
+    public void clearAfterWave()
+    {
+        balloonsInRange.clear();
+    }
+
     public ImageView getImageView()
     {
         return towerImg;
