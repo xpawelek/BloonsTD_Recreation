@@ -1,7 +1,5 @@
 package app.model;
 
-import app.utils.AppConstans;
-
 public class GameState {
     private int lives;
     private int money;
@@ -84,7 +82,8 @@ public class GameState {
     public void loseLife(int lives)
     {
         this.lives -= lives;
-        //this.lives -= 0;
+        if(lives <= 0)
+            this.lives = 0;
     }
 
     public void addCoin()
@@ -104,6 +103,4 @@ public class GameState {
         gameContinues = false;
         roundContinues = false;
     }
-
-    //store info about items and about where there are placed etc
 }

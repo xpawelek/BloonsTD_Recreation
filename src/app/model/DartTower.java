@@ -5,13 +5,10 @@ import javafx.animation.PauseTransition;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
-
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
 
-public class DartTower extends DeffenceTower {
+public class DartTower extends DefenceTower {
     private double angle = -1;
     private long lastShotTime = 0;
     private long fire_cooldown = 600;
@@ -26,14 +23,14 @@ public class DartTower extends DeffenceTower {
     }
 
     private void init() {
-        towerImagePath = "/app/view/assets/images/dartDefender_tower.png";
-        towerImg = new ImageView(towerImagePath);
-        firstUpgradeImagePath = "/app/view/assets/images/dart_tower_first_upgrade.png";
-        secondUpgradeImagePath = "/app/view/assets/images/dart_tower_second_upgrade.png";
-        priceValue = 300;
-        firstUpgradePrice = 100;
-        secondUpgradePrice = 150;
-        range = 100;
+        this.towerImagePath = "/app/view/assets/images/dartDefender_tower.png";
+        this.firstUpgradeImagePath = "/app/view/assets/images/dart_tower_first_upgrade.png";
+        this.secondUpgradeImagePath = "/app/view/assets/images/dart_tower_second_upgrade.png";
+        this.towerImg = new ImageView(towerImagePath);
+        this.priceValue = 250;
+        this.firstUpgradePrice = 100;
+        this.secondUpgradePrice = 150;
+        this.range = 100;
     }
 
     @Override
@@ -46,7 +43,6 @@ public class DartTower extends DeffenceTower {
 
         Balloon b = balloonInRange(balloon);
         if (b == null) {
-            //angle = 0;
             return;
         }
 
@@ -102,16 +98,4 @@ public class DartTower extends DeffenceTower {
     {
         return angle;
     }
-
-    public void setAngle(double angle)
-    {
-
-    }
-
-    public void clearBalloonsInRange()
-    {
-        balloonsInRange.clear();
-    }
-
-    //to do - piercing more + range
 }

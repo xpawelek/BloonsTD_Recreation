@@ -1,11 +1,16 @@
 package app.utils;
 
-import app.model.DeffenceTower;
+import app.model.DefenceTower;
 import app.model.GameState;
-
-import java.util.*;
+import app.model.InformationBoard;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.AbstractMap;
 
 public class AppConstans {
+
     private AppConstans() {}
 
     public static final int SCREEN_WIDTH = 850;
@@ -13,7 +18,8 @@ public class AppConstans {
     public static GameState gameState = new GameState();
     public static String ballons_path =  "/app/view/assets/images/";
     public static Map<String, Integer> ballon_img_list = new LinkedHashMap<>();
-    public static DeffenceTower currentClickedDeffenceTower = null;
+    public static DefenceTower currentClickedDeffenceTower = null;
+    public static InformationBoard informationBoard = new InformationBoard();
 
     static {
         ballon_img_list.put(null, null);
@@ -75,6 +81,5 @@ public class AppConstans {
     }
 
     public static List<Map.Entry<Double, Double>> roadPoints = extendKeyPoints(keyPoints);
-
-    public static List<DeffenceTower> boughtTowers = new ArrayList<>();
+    public static List<DefenceTower> boughtTowers = new ArrayList<>();
 }

@@ -2,7 +2,6 @@ package app.model;
 
 import app.utils.AppConstans;
 import javafx.animation.PathTransition;
-import javafx.animation.PauseTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.shape.LineTo;
@@ -14,56 +13,46 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class Balloon {
-    private int ballon_lives;
-    private int ballon_speed;
-    private ImageView ballon_img;
-    private double offset_y = 100;
-    private Path path = new Path();
-    private double balloonPositionX;
-    private double balloonPositionY;
-    private PathTransition pathTransition;
+    private int balloon_lives, balloon_speed;
+    private ImageView balloon_img;
+    private double balloonPositionX, balloonPositionY;
+    private final PathTransition pathTransition;
 
     public Balloon() {
         pathTransition = new PathTransition();
     }
-    public Balloon(int ballon_lives) {
-        this.ballon_lives = ballon_lives;
-        this.ballon_speed =  new ArrayList<>(AppConstans.ballon_img_list.values()).get(ballon_lives);
-        this.ballon_img = new ImageView(new ArrayList<>(AppConstans.ballon_img_list.keySet()).get(ballon_lives));
-        this.ballon_img.setId("balloon");
-        pathTransition = new PathTransition();
-        //this.ballon_img.setVisible(false); -> migajace balony ogarnac
-        //this.ballon_img.setFitHeight(30);
-        //this.ballon_img.setFitWidth(30);
+    public Balloon(int balloon_lives) {
+        this.balloon_speed =  new ArrayList<>(AppConstans.ballon_img_list.values()).get(balloon_lives);
+        this.balloon_img = new ImageView(new ArrayList<>(AppConstans.ballon_img_list.keySet()).get(balloon_lives));
+        this.balloon_img.setId("balloon");
+        this.balloon_lives = balloon_lives;
+        this.pathTransition = new PathTransition();
     }
 
     public ImageView getImageView() {
-        return ballon_img;
+        return balloon_img;
     }
 
     public void updateImage(String imagePath) {
-        ballon_img.setImage(new Image(imagePath));
+        balloon_img.setImage(new Image(imagePath));
     }
 
     public int getBalloonLives()
     {
-        return ballon_lives;
+        return balloon_lives;
     }
-
 
     public void updateBalloonLives()
     {
-        ballon_lives--;
-        if(ballon_lives <= 0)
+        balloon_lives--;
+        if(balloon_lives <= 0)
         {
             Balloon obj = new Balloon();
             obj = null;
             return;
         }
-
-        updateImage(new ArrayList<>(AppConstans.ballon_img_list.keySet()).get(ballon_lives));
-        //speed hash map?
-        ballon_speed -= (int)(Math.random() * 2);
+        updateImage(new ArrayList<>(AppConstans.ballon_img_list.keySet()).get(balloon_lives));
+        balloon_speed -= (int)(Math.random() * 2);
     }
 
     public void followPath() {
@@ -74,7 +63,7 @@ public class Balloon {
         }
 
         pathTransition.setPath(path);
-        pathTransition.setDuration(Duration.seconds(ballon_speed));
+        pathTransition.setDuration(Duration.seconds(balloon_speed));
         pathTransition.setCycleCount(1);
         pathTransition.setNode(getImageView());
         pathTransition.play();
@@ -90,23 +79,22 @@ public class Balloon {
         pathTransition.play();
     }
 
-    public void setBalloonPositionX(double balloonPositionX)
-    {
-        this.balloonPositionX = balloonPositionX;
-    }
-
     public double getBalloonPositionX()
     {
         return balloonPositionX;
     }
 
-    public void setBalloonPositionY(double balloonPositionY)
+    public void setBalloonPositionX(double balloonPositionX)
     {
-        this.balloonPositionY = balloonPositionY;
+        this.balloonPositionX = balloonPositionX;
     }
 
     public double getBalloonPositionY()
     {
         return balloonPositionY;
+    }
+    public void setBalloonPositionY(double balloonPositionY)
+    {
+        this.balloonPositionY = balloonPositionY;
     }
 }

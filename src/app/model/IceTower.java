@@ -5,22 +5,19 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class IceTower extends DeffenceTower {
+public class IceTower extends DefenceTower {
 
     private long lastShotTime = 0;
     private long fire_cooldown = 5000;
     private List<Balloon> balloonsHit;
-    private final int animationLength = 500;
 
     public IceTower() {
         init();
@@ -32,32 +29,31 @@ public class IceTower extends DeffenceTower {
     }
 
     private void init() {
-        towerImagePath = "/app/view/assets/images/ice_tower.png";
-        towerImg = new ImageView(towerImagePath);
-        towerImg.setFitWidth(60);
-        towerImg.setFitHeight(60);
-        balloonsHit = new ArrayList<>();
-        firstUpgradeImagePath = "/app/view/assets/images/ice_tower_first_upgrade.png";
-        secondUpgradeImagePath = "/app/view/assets/images/ice_tower_second_upgrade.png";
-        priceValue = 300;
-        firstUpgradePrice = 100;
-        secondUpgradePrice = 150;
-        range = 120;
+        this.towerImagePath = "/app/view/assets/images/ice_tower.png";
+        this.firstUpgradeImagePath = "/app/view/assets/images/ice_tower_first_upgrade.png";
+        this.secondUpgradeImagePath = "/app/view/assets/images/ice_tower_second_upgrade.png";
+        this.towerImg = new ImageView(towerImagePath);
+        this.towerImg.setFitWidth(60);
+        this.towerImg.setFitHeight(60);
+        this.priceValue = 300;
+        this.firstUpgradePrice = 100;
+        this.secondUpgradePrice = 150;
+        this.range = 120;
+        this.balloonsHit = new ArrayList<>();
     }
 
     @Override
     public void manageHitting(Balloon balloon, Pane mapPane)
     {
-        //System.out.println("manage hitting for ice!!");
         balloonInRange(balloon);
-        System.out.println(balloonsInRange.size());
         long now = System.currentTimeMillis();
 
         if(now - lastShotTime < fire_cooldown)
             return;
 
+        int animationLength = 500;
+        
         if(!balloonsInRange.isEmpty()) {
-            //animacja
             int colors = 7;
             Circle circle = new Circle();
             circle.setCenterX(getTowerX() + getTowerImg().getFitWidth() / 2.0);
@@ -105,7 +101,16 @@ public class IceTower extends DeffenceTower {
             iceAnimation.play();
         }
 
-        PauseTransition delay = new PauseTransition(Duration.millis((double) animationLength / 2));
+        PauseTransition delay = getPauseTransition_HandleSlowingDown((double) animationLength);
+
+        delay.play();
+        balloonsInRange.clear();
+
+        lastShotTime = now;
+    }
+
+    private PauseTransition getPauseTransition_HandleSlowingDown(double animationLength) {
+        PauseTransition delay = new PauseTransition(Duration.millis(animationLength / 2));
         delay.setOnFinished(event -> {
             for(Balloon b : balloonsInRange)
             {
@@ -119,14 +124,9 @@ public class IceTower extends DeffenceTower {
                     });
                     resumeAfter.play();
                 }
-                // System.out.println(b.getBalloonLives());
             }
         });
-
-        delay.play();
-        balloonsInRange.clear();
-
-        lastShotTime = now;
+        return delay;
     }
 
     public void manageFirstUpgrade()

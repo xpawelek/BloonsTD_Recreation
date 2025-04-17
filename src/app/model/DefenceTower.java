@@ -3,36 +3,31 @@ package app.model;
 import app.utils.AppConstans;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class DeffenceTower {
-    protected int priceValue;
-    protected double positionX;
-    protected double positionY;
+public abstract class DefenceTower {
     protected ImageView towerImg;
+    protected int priceValue;
+    protected int range;
+    protected int firstUpgradePrice;
+    protected int secondUpgradePrice;
+    protected double positionX, positionY;
     protected boolean isOnMapPane = false;
     protected boolean sellTower = false;
-    protected int range;
+    protected boolean firstUpgrade = false;
+    protected boolean secondUpgrade = false;
     protected String towerImagePath;
     protected String firstUpgradeImagePath;
     protected String secondUpgradeImagePath;
-    protected int firstUpgradePrice;
-    protected int secondUpgradePrice;
-    protected boolean firstUpgrade = false;
-    protected boolean secondUpgrade = false;
     protected List<Balloon> balloonsInRange = new ArrayList<>();
-    private double towerMiddleX;
-    private double towerMiddleY;
 
-    public DeffenceTower() {}
-    public DeffenceTower(double positionX, double positionY)
+
+    public DefenceTower() {}
+    public DefenceTower(double positionX, double positionY)
     {
         this.positionX = positionX;
         this.positionY = positionY;
-        towerMiddleX = getTowerX() + getTowerImg().getFitWidth() / 2.0;
-        towerMiddleY = getTowerY() + getTowerImg().getFitHeight() / 2.0;
     }
 
     public ImageView getTowerImg(){
@@ -59,10 +54,6 @@ public abstract class DeffenceTower {
         return priceValue;
     }
 
-    public void addPriceValue(int price){
-        this.priceValue += price;
-    }
-
     public void setSellTower(){
         sellTower = true;
     }
@@ -79,11 +70,6 @@ public abstract class DeffenceTower {
     public int getRange()
     {
         return range;
-    }
-
-    public void setNewRange(int range)
-    {
-        this.range = range;
     }
 
     public String getTowerImagePath()
@@ -139,14 +125,11 @@ public abstract class DeffenceTower {
 
     public Balloon balloonInRange(Balloon balloon)
     {
-        double towerX = getTowerX() + getTowerImg().getFitWidth() / 2.0;
-        double towerY = getTowerY() + getTowerImg().getFitHeight() / 2.0;
-
         double balloonX = balloon.getBalloonPositionX();
         double balloonY = balloon.getBalloonPositionY();
 
-        double dx = towerX - balloonX;
-        double dy = towerY - balloonY;
+        double dx = getTowerX() + getTowerImg().getFitWidth() / 2.0 - balloonX;
+        double dy = getTowerY() + getTowerImg().getFitHeight() / 2.0 - balloonY;
 
         if(dx * dx + dy * dy <= range * range)
         {
@@ -154,19 +137,17 @@ public abstract class DeffenceTower {
                 balloonsInRange.add(balloon);
             return balloon;
         }
+
         return null;
     }
 
     public boolean balloonStillInRange(Balloon balloon)
     {
-        double towerX = getTowerX() + getTowerImg().getFitWidth() / 2.0;
-        double towerY = getTowerY() + getTowerImg().getFitHeight() / 2.0;
-
         double balloonX = balloon.getBalloonPositionX();
         double balloonY = balloon.getBalloonPositionY();
 
-        double dx = towerX - balloonX;
-        double dy = towerY - balloonY;
+        double dx = getTowerX() + getTowerImg().getFitWidth() / 2.0 - balloonX;
+        double dy = getTowerY() + getTowerImg().getFitHeight() / 2.0 - balloonY;
 
         return dx * dx + dy * dy <= (range + range * 0.1) * (range + range * 0.1);
     }
@@ -174,11 +155,6 @@ public abstract class DeffenceTower {
     public void clearAfterWave()
     {
         balloonsInRange.clear();
-    }
-
-    public ImageView getImageView()
-    {
-        return towerImg;
     }
 
     public abstract void manageHitting(Balloon balloon, Pane mapPane);

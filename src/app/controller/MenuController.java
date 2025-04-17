@@ -28,18 +28,15 @@ public class MenuController {
     @FXML
     public void initialize() {
         Image image = new Image(getClass().getResourceAsStream("/app/view/assets/images/home_page.png"));
-        gridPane.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
 
+        gridPane.setBackground(new Background(new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT)));
         startGameButton.getStyleClass().add("start-button-game");
         startGameButton.setOnMouseEntered(e -> scaleUp(startGameButton));
         startGameButton.setOnMouseExited(e -> scaleDown(startGameButton));
-
-        System.out.println("GameController initialized!");
     }
 
     @FXML
     private void startGame() throws IOException{
-
         Main.switchScene("/app/view/fxml/game.fxml");
     }
 

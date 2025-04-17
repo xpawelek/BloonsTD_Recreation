@@ -12,19 +12,15 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-
 import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import app.core.Main;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
-
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.util.Duration;
-
 import javafx.scene.Node;
 
 public class GameController {
@@ -58,6 +54,7 @@ public class GameController {
         backgroundGameImage.setImage(image);
         backgroundGameImage.setFitWidth(AppConstans.SCREEN_WIDTH);
         backgroundGameImage.setFitHeight(AppConstans.SCREEN_HEIGHT);
+
         towersBoard.setVisible(true);
         towerModifyBoard.setVisible(false);
 
@@ -80,10 +77,10 @@ public class GameController {
         });
         pause.play();
     }
+
     @FXML
     public void startRound() throws IOException
     {
-        System.out.println("!");
         AppConstans.gameState.setRoundContinues();
         AppConstans.gameState.changeWaveStarted();
     }
@@ -91,7 +88,6 @@ public class GameController {
     @FXML
     public void restartGame() throws IOException
     {
-        System.out.println("!");
         AppConstans.gameState.restartGame();
         Main.switchScene("/app/view/fxml/game.fxml");
     }
@@ -124,17 +120,12 @@ public class GameController {
 
     public void addBalloonToMapPane(Balloon balloon)
     {
-        //gridPane.getChildren().add(balloon.getImageView());
-        //gridPane.add(balloon.getImageView(), 0,0);
         if(balloon.getImageView() != null)
+        {
+            balloon.getImageView().setTranslateX(AppConstans.roadPoints.getFirst().getKey());
+            balloon.getImageView().setTranslateY(AppConstans.roadPoints.getFirst().getValue());
             mapPane.getChildren().add(balloon.getImageView());
-        /*
-        System.out.println("Dzieci gridPane:");
-        for (Node node : gridPane.getChildren()) {
-            System.out.println("- " + node + ", id: " + node.getId());
         }
-         */
-        //grid pane add with row and column?
     }
 
     public Pane getMapPane()
@@ -145,10 +136,9 @@ public class GameController {
     public void removeBalloonFromMapPane(Balloon balloon)
     {
         mapPane.getChildren().remove(balloon.getImageView());
-        //po zmianie image nie wiadomo czy nie inny sposob usuniecia np po id
     }
 
-    public double getPositionX(Balloon balloon) {
+    public double getBalloonPositionX(Balloon balloon) {
         if(balloon.getImageView() != null) {
             Bounds bounds = balloon.getImageView().getBoundsInParent();
             return bounds.getMinX() + bounds.getWidth() / 2.0;
@@ -156,7 +146,7 @@ public class GameController {
         return -1;
     }
 
-    public double getPositionY(Balloon balloon) {
+    public double getBalloonPositionY(Balloon balloon) {
         if(balloon.getImageView() != null) {
             Bounds bounds = balloon.getImageView().getBoundsInParent();
             return bounds.getMinY() + bounds.getHeight() / 2.0;
@@ -164,43 +154,31 @@ public class GameController {
         return -1;
     }
 
-    public void addTowerToMapPane(DeffenceTower deffenceTower)
+    public void addTowerToMapPane(DefenceTower defenceTower)
     {
-        System.out.println("dodawniae??");
-        ImageView towerImage = deffenceTower.getTowerImg();
-        towerImage.setLayoutX(deffenceTower.getTowerX());
-        towerImage.setLayoutY(deffenceTower.getTowerY());
-        towerImage.setUserData(deffenceTower);
-        towerImage.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> towerClickedHandler(event));
+        ImageView towerImage = defenceTower.getTowerImg();
+        towerImage.setLayoutX(defenceTower.getTowerX());
+        towerImage.setLayoutY(defenceTower.getTowerY());
+        towerImage.setUserData(defenceTower);
+        towerImage.addEventHandler(MouseEvent.MOUSE_CLICKED, event -> boughtTowerClickedHandler(event));
+
         mapPane.getChildren().add(towerImage);
     }
 
-    public void removeTowerFromMapPane(DeffenceTower deffenceTower) {
-        if (mapPane.getChildren().contains(deffenceTower.getTowerImg()))
+    public void removeTowerFromMapPane(DefenceTower defenceTower) {
+        if (mapPane.getChildren().contains(defenceTower.getTowerImg()))
         {
-            mapPane.getChildren().remove(deffenceTower.getTowerImg());
+            mapPane.getChildren().remove(defenceTower.getTowerImg());
             mapPane.getChildren().remove(rangeCircle);
         }
     }
 
-    public void upadateTowerAngle(DeffenceTower deffenceTower)
-    {
-        if (mapPane.getChildren().contains(deffenceTower.getTowerImg()))
-        {
-            if(deffenceTower instanceof DartTower)
-            {
-                deffenceTower.getTowerImg().setRotate(((DartTower) deffenceTower).getAngle() + 90);
-            }
-        }
-    }
-
-    public void towerClickedHandler(MouseEvent event) {
+    public void boughtTowerClickedHandler(MouseEvent event) {
         event.consume();
 
         Node clickedTower = (Node) event.getSource();
         mapPane.getChildren().remove(rangeCircle);
         AppConstans.currentClickedDeffenceTower = null;
-        //clickedTower.setRotate(45);
 
         if (selectedTower == clickedTower) {
             selectedTower = null;
@@ -208,7 +186,7 @@ public class GameController {
         }
 
         selectedTower = (ImageView)event.getSource();
-        AppConstans.currentClickedDeffenceTower = (DeffenceTower) selectedTower.getUserData();
+        AppConstans.currentClickedDeffenceTower = (DefenceTower) selectedTower.getUserData();
 
         int range = AppConstans.currentClickedDeffenceTower.getRange();
         rangeCircle = new Circle(range);
@@ -260,12 +238,9 @@ public class GameController {
 
             AppConstans.currentClickedDeffenceTower.manageFirstUpgrade();
             rangeCircle.setRadius(AppConstans.currentClickedDeffenceTower.getRange());
-            //check if enough money + buy + add more worth
-            //AppConstans.currentClickedDeffenceTower.setNewRange(150);
         });
 
         secondUpgrade.setOnMouseClicked(e -> {
-            //check if enough money + buy + add more worth
             if(AppConstans.gameState.getMoney() < AppConstans.currentClickedDeffenceTower.getSecondUpgradePrice()
             || AppConstans.currentClickedDeffenceTower.isSecondUpgradeBought())
                 return;
@@ -273,7 +248,6 @@ public class GameController {
             AppConstans.currentClickedDeffenceTower.manageSecondUpgrade();
             rangeCircle.setRadius(AppConstans.currentClickedDeffenceTower.getRange());
         });
-
     }
 
     private void cancelPlacing()
@@ -293,14 +267,13 @@ public class GameController {
     public void defenderIconClickedOnBoard(MouseEvent mouseEvent) {
 
         TowerType type = (TowerType) ((Node) mouseEvent.getSource()).getUserData();
-        DeffenceTower clickedTower = type.create();
+        DefenceTower clickedTower = type.create();
 
         if(clickedTower.getPriceValue() > AppConstans.gameState.getMoney()){
+            AppConstans.informationBoard.setInformation("Not enough money, you need: " + clickedTower.getPriceValue() + "!");
+            AppConstans.informationBoard.displayInformation(mapPane);
             return;
         }
-
-        System.out.println(clickedTower.getPriceValue());
-        System.out.println(clickedTower.getTowerImagePath());
 
         AtomicBoolean canPlace = new AtomicBoolean(false);
 
@@ -325,8 +298,6 @@ public class GameController {
         int roadWidth = 50;
 
         rangeCircle = new Circle(range);
-        //rangeCircle.setStroke(Color.color(1, 1, 1, 0.5));
-        //rangeCircle.setFill(Color.color(1, 1, 1, 0.1));
         rangeCircle.setStroke(Color.color(1, 0, 0, 0.5));
         rangeCircle.setFill(Color.color(1, 0, 0, 0.3));
         rangeCircle.setMouseTransparent(true);
@@ -355,12 +326,10 @@ public class GameController {
                 boolean isInRange = false;
                 boolean isOnThePath = false;
 
-                //jesli w ktorymkolwiek punkcie odleglosc > range -> mniejsza od
-                //wielkosci drogi - tez nie mozna, mniedzy range a droga -> mozna
                 for (Map.Entry<Double, Double> point : AppConstans.roadPoints) {
                     double dx = point.getKey() - e.getX();
                     double dy = point.getValue() - e.getY();
-                    //euklides ^2, forbid putting
+
                     if(dx * dx + dy * dy <= range * range)
                     {
                         isInRange = true;
@@ -390,20 +359,13 @@ public class GameController {
 
             if(canPlace.get())
             {
-                //DartTower tower = new DartTower(e.getX() - centerX, e.getY() - centerY);
-                //AppConstans.boughtTowers.add(tower);
                 mapPane.getChildren().remove(ghost);
-                //ImageView monkey = new ImageView(dartImage);
-                //monkey.setLayoutX(e.getX() - centerX);
-                // monkey.setLayoutY(e.getY() - centerY);
-                // monkey.setMouseTransparent(false);
-                // mapPane.getChildren().add(monkey);
 
                 clickedTower.setPositionX(e.getX() - centerX);
                 clickedTower.setPositionY(e.getY() - centerY);
+
                 AppConstans.boughtTowers.add(clickedTower);
                 AppConstans.gameState.updateMoneyAfterBuying(clickedTower.getPriceValue());
-                System.out.println("dodano tower");
 
                 cancelPlacing();
             }

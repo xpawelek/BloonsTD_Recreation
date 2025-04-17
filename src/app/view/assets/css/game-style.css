@@ -11,10 +11,6 @@
     -fx-font-weight: bold;
 }
 
-.game-grid-pane{
-
-}
-
 .side-game-panel {
     -fx-background-color: rgba(10, 10, 10, 0.25);
     -fx-text-fill: white;
@@ -132,4 +128,15 @@
     -fx-border-radius: 5;
     -fx-scale-x: 1;
     -fx-scale-y: 1;
+}
+
+.information-label
+{
+    -fx-font-family: 'Orbitron';
+    -fx-text-fill: rgba(255, 255, 255, 0.75);
+    -fx-padding: 20 40;
+    -fx-font-size: 15px;
+    -fx-background-color: rgba(255, 255, 255, 0.25);
+    -fx-background-insets: 5;
+    -fx-font-weight: bold;
 }

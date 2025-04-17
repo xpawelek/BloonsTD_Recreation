@@ -7,13 +7,13 @@ public enum TowerType {
     ICE(IceTower::new),
     TACK(TackTower::new);
 
-    private final Supplier<DeffenceTower> constructor;
+    private final Supplier<DefenceTower> constructor;
 
-    TowerType(Supplier<DeffenceTower>constructor) {
+    TowerType(Supplier<DefenceTower>constructor) {
         this.constructor = constructor;
     }
 
-    public DeffenceTower create() {
+    public DefenceTower create() {
         return constructor.get();
     }
 }
