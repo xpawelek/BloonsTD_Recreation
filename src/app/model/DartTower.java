@@ -2,6 +2,7 @@ package app.model;
 
 import app.utils.AppConstans;
 import javafx.animation.PauseTransition;
+import javafx.geometry.Bounds;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
@@ -12,6 +13,7 @@ public class DartTower extends DefenceTower {
     private double angle = -1;
     private long lastShotTime = 0;
     private long fire_cooldown = 600;
+    //private boolean canRotate = true;
 
     public DartTower() {
         init();
@@ -27,9 +29,9 @@ public class DartTower extends DefenceTower {
         this.firstUpgradeImagePath = "/app/view/assets/images/dart_tower_first_upgrade.png";
         this.secondUpgradeImagePath = "/app/view/assets/images/dart_tower_second_upgrade.png";
         this.towerImg = new ImageView(towerImagePath);
-        this.priceValue = 250;
-        this.firstUpgradePrice = 100;
-        this.secondUpgradePrice = 150;
+        this.priceValue = 300;
+        this.firstUpgradePrice = 150;
+        this.secondUpgradePrice = 100;
         this.range = 100;
     }
 
@@ -54,23 +56,23 @@ public class DartTower extends DefenceTower {
             b = strongest.get();
         }
 
+        Bounds bounds = towerImg.localToScene(towerImg.getBoundsInLocal());
+        double centerX = bounds.getMinX() + bounds.getWidth() / 2;
+        double centerY = bounds.getMinY() + bounds.getHeight() / 2;
+        Dart dart = new Dart(
+                centerX,
+                centerY,
+                balloon.getBalloonPositionX(),
+                balloon.getBalloonPositionY()
+        );
+
         angle = Math.toDegrees(Math.atan2(getTowerY() - b.getBalloonPositionY(), getTowerX() - b.getBalloonPositionX()));
 
-        Dart dart = new Dart(super.positionX, super.positionY, balloon.getBalloonPositionX(), balloon.getBalloonPositionY());
-        if (!mapPane.getChildren().contains(dart.getDartImage())) {
-            mapPane.getChildren().add(dart.getDartImage());
-        }
+        dart.setDartStartingPosition(centerX, centerY);
+        towerImg.setRotate(angle + 90);
 
-        PauseTransition pause = new PauseTransition(Duration.millis(5));
-        Balloon finalB = b;
-
-        pause.setOnFinished(event -> {
-            dart.setDartStartingPosition(super.positionX, super.positionY, towerImg.getFitWidth(), towerImg.getFitHeight());
-            towerImg.setRotate(angle + 90);
-            dart.setRotate(angle + 90);
-            dart.throwDart(finalB, mapPane);
-        });
-        pause.play();
+        mapPane.getChildren().add(dart.getDartImage());
+        dart.throwDart(balloon, mapPane);
 
         lastShotTime = now;
     }
@@ -92,10 +94,5 @@ public class DartTower extends DefenceTower {
         AppConstans.gameState.updateMoneyAfterBuying(getSecondUpgradePrice());
 
         this.range = 130;
-    }
-
-    public double getAngle()
-    {
-        return angle;
     }
 }

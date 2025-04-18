@@ -55,6 +55,10 @@ public class GameController {
         backgroundGameImage.setFitWidth(AppConstans.SCREEN_WIDTH);
         backgroundGameImage.setFitHeight(AppConstans.SCREEN_HEIGHT);
 
+        mapPane.setPrefSize(AppConstans.SCREEN_WIDTH, AppConstans.SCREEN_HEIGHT);
+        mapPane.setMinSize(AppConstans.SCREEN_WIDTH, AppConstans.SCREEN_HEIGHT);
+        mapPane.setMaxSize(AppConstans.SCREEN_WIDTH, AppConstans.SCREEN_HEIGHT);
+
         towersBoard.setVisible(true);
         towerModifyBoard.setVisible(false);
 

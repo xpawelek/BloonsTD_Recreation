@@ -111,21 +111,23 @@ public class GameLoop extends AnimationTimer {
     }
 
     public void restartGameAfterLoss() throws IOException {
-        gameController.restartGameButton.setDisable(true);
+        if (!isAnyLifeLeft()) {
+            gameController.restartGameButton.setDisable(true);
 
-        AppConstans.informationBoard.setInformation("You lost, restarting in 3 seconds...");
-        AppConstans.informationBoard.displayInformation(gameController.mapPane, gameController.sideGamePanel);
+            AppConstans.informationBoard.setInformation("You lost, restarting in 3 seconds...");
+            AppConstans.informationBoard.displayInformation(gameController.mapPane, gameController.sideGamePanel);
 
-        PauseTransition delay = new PauseTransition(Duration.seconds(3));
-        delay.setOnFinished(event -> {
-            try {
-                gameController.restartGame();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            gameController.restartGameButton.setDisable(false);
-        });
-        delay.play();
+            PauseTransition delay = new PauseTransition(Duration.seconds(3));
+            delay.setOnFinished(event -> {
+                try {
+                    gameController.restartGame();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                gameController.restartGameButton.setDisable(false);
+            });
+            delay.play();
+        }
     }
 
     //balloons handling methods
@@ -190,11 +192,11 @@ public class GameLoop extends AnimationTimer {
 
     private void addRandomAdditionalBalloons()
     {
-        int rand_num = (int)(Math.random() * 5) + 1;
+        int rand_num = (int)(Math.random() * 25) + 1;
 
-        if(rand_num == (int)(Math.random() * 5) + 1)
+        if(rand_num == (int)(Math.random() * 25) + 1)
         {
-            for(int i = 0; i < (int)(Math.random() * 8) + 1; i++)
+            for(int i = 0; i < (int)(Math.random() * 5) + 1; i++)
             {
                 int randBalloonIndex = (int)(Math.random() * (AppConstans.ballon_img_list.size() - 3)) + 1;
                 this.balloons.add(new Balloon(randBalloonIndex));
