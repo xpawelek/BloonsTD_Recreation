@@ -1,11 +1,9 @@
 package app.model;
 
 import app.utils.AppConstans;
-import javafx.animation.PauseTransition;
 import javafx.geometry.Bounds;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.util.Duration;
 import java.util.Comparator;
 import java.util.Optional;
 
@@ -59,20 +57,15 @@ public class DartTower extends DefenceTower {
         Bounds bounds = towerImg.localToScene(towerImg.getBoundsInLocal());
         double centerX = bounds.getMinX() + bounds.getWidth() / 2;
         double centerY = bounds.getMinY() + bounds.getHeight() / 2;
-        Dart dart = new Dart(
-                centerX,
-                centerY,
-                balloon.getBalloonPositionX(),
-                balloon.getBalloonPositionY()
-        );
 
         angle = Math.toDegrees(Math.atan2(getTowerY() - b.getBalloonPositionY(), getTowerX() - b.getBalloonPositionX()));
-
-        dart.setDartStartingPosition(centerX, centerY);
         towerImg.setRotate(angle + 90);
 
+        Dart dart = new Dart(centerX, centerY, b.getBalloonPositionX(), b.getBalloonPositionY());
+        dart.setDartStartingPosition(centerX, centerY);
+
         mapPane.getChildren().add(dart.getDartImage());
-        dart.throwDart(balloon, mapPane);
+        dart.throwDart(b, mapPane, range);
 
         lastShotTime = now;
     }

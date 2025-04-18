@@ -35,7 +35,7 @@ public class Dart {
         this.dartImage.setRotate(0);
     }
 
-    public void throwDart(Balloon balloon, Pane mapPane) {
+    public void throwDart(Balloon balloon, Pane mapPane, int range) {
         double dx = targetPositionX - towerPositionX;
         double dy = targetPositionY - towerPositionY;
         double distance = Math.hypot(dx, dy);
@@ -65,15 +65,18 @@ public class Dart {
                 balloon.updateBalloonLives();
                 timeline.stop();
             }
+
+            double distanceFromTower = Math.hypot(currentX - towerPositionX, currentY - towerPositionY);
+            if (distanceFromTower > range) {
+                mapPane.getChildren().remove(dartImage);
+                timeline.stop();
+            }
         });
 
         timeline.getKeyFrames().add(keyFrame);
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
     }
-
-
-
 
     public ImageView getDartImage() {
         return dartImage;
