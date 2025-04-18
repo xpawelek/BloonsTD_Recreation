@@ -4,8 +4,11 @@ import app.controller.GameController;
 import app.utils.AppConstans;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.util.Duration;
+
+import java.io.IOException;
 import java.util.*;
 
 
@@ -63,7 +66,6 @@ public class GameLoop extends AnimationTimer {
             timelineBalloons.getKeyFrames().add(keyFrame);
         }
         timelineBalloons.play();
-        System.out.println(balloons.size());
     }
 
     public boolean areAllBalloonsDestroyed()
@@ -97,7 +99,7 @@ public class GameLoop extends AnimationTimer {
         updateGameInfo();
     }
 
-    public void clearAfterRound()
+    public void clearAfterGame()
     {
         clearBalloonsAfterWave();
         clearTowersFromMap();
@@ -108,6 +110,23 @@ public class GameLoop extends AnimationTimer {
         return AppConstans.gameState.getLives() > 0;
     }
 
+    public void restartGameAfterLoss() throws IOException {
+        gameController.restartGameButton.setDisable(true);
+
+        AppConstans.informationBoard.setInformation("You lost, restarting in 3 seconds...");
+        AppConstans.informationBoard.displayInformation(gameController.mapPane, gameController.sideGamePanel);
+
+        PauseTransition delay = new PauseTransition(Duration.seconds(3));
+        delay.setOnFinished(event -> {
+            try {
+                gameController.restartGame();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            gameController.restartGameButton.setDisable(false);
+        });
+        delay.play();
+    }
 
     //balloons handling methods
 
@@ -327,7 +346,12 @@ public class GameLoop extends AnimationTimer {
             }
         }
         else {
-            clearAfterRound();
+            clearAfterGame();
+            try {
+                restartGameAfterLoss();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
             AppConstans.boughtTowers.clear();
             stop();
         }

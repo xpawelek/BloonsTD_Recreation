@@ -82,7 +82,7 @@ public class GameState {
     public void loseLife(int lives)
     {
         this.lives -= lives;
-        if(lives <= 0)
+        if(this.lives <= 0)
             this.lives = 0;
     }
 

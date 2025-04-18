@@ -271,7 +271,7 @@ public class GameController {
 
         if(clickedTower.getPriceValue() > AppConstans.gameState.getMoney()){
             AppConstans.informationBoard.setInformation("Not enough money, you need: " + clickedTower.getPriceValue() + "!");
-            AppConstans.informationBoard.displayInformation(mapPane);
+            AppConstans.informationBoard.displayInformation(mapPane, sideGamePanel);
             return;
         }
 
@@ -286,7 +286,6 @@ public class GameController {
         mapPane.getChildren().remove(rangeCircle);
         placingTower = true;
 
-        System.out.println(clickedTower.getTowerImagePath());
         Image towerImage = new Image(getClass().getResource(clickedTower.getTowerImagePath()).toExternalForm());
         ImageView ghostMonkey = new ImageView(towerImage);
         ghostMonkey.setOpacity(0.8);
@@ -325,6 +324,7 @@ public class GameController {
 
                 boolean isInRange = false;
                 boolean isOnThePath = false;
+                boolean isOverlappingOtherTower = false;
 
                 for (Map.Entry<Double, Double> point : AppConstans.roadPoints) {
                     double dx = point.getKey() - e.getX();
@@ -341,7 +341,20 @@ public class GameController {
                         break;
                     }
                 }
-                if(isInRange && !isOnThePath)
+
+                for(DefenceTower tower : AppConstans.boughtTowers)
+                {
+                    double dx = tower.getTowerX() + tower.getTowerImg().getBoundsInParent().getWidth() / 2.0 - e.getX();
+                    double dy = tower.getTowerY() + tower.getTowerImg().getBoundsInParent().getHeight() / 2.0 - e.getY();
+
+                    if(dx * dx + dy * dy <= 20 * 20)
+                    {
+                        isOverlappingOtherTower = true;
+                        break;
+                    }
+                }
+
+                if(isInRange && !isOnThePath && !isOverlappingOtherTower)
                 {
                     rangeCircle.setStroke(Color.color(1, 1, 1, 0.5));
                     rangeCircle.setFill(Color.color(1, 1, 1, 0.1));
