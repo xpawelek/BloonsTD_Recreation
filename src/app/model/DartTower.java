@@ -11,7 +11,6 @@ public class DartTower extends DefenceTower {
     private double angle = -1;
     private long lastShotTime = 0;
     private long fire_cooldown = 600;
-    //private boolean canRotate = true;
 
     public DartTower() {
         init();
@@ -27,7 +26,7 @@ public class DartTower extends DefenceTower {
         this.firstUpgradeImagePath = "/app/view/assets/images/dart_tower_first_upgrade.png";
         this.secondUpgradeImagePath = "/app/view/assets/images/dart_tower_second_upgrade.png";
         this.towerImg = new ImageView(towerImagePath);
-        this.priceValue = 300;
+        this.priceValue = 250;
         this.firstUpgradePrice = 150;
         this.secondUpgradePrice = 100;
         this.range = 100;
@@ -36,6 +35,7 @@ public class DartTower extends DefenceTower {
     @Override
     public void manageHitting(Balloon balloon, Pane mapPane)
     {
+        balloonsInRange.clear();
         long now = System.currentTimeMillis();
 
         if(now - lastShotTime < fire_cooldown)
@@ -65,7 +65,7 @@ public class DartTower extends DefenceTower {
         dart.setDartStartingPosition(centerX, centerY);
 
         mapPane.getChildren().add(dart.getDartImage());
-        dart.throwDart(b, mapPane, range);
+        dart.throwDart(b, mapPane, this, range);
 
         lastShotTime = now;
     }

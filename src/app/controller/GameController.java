@@ -197,6 +197,8 @@ public class GameController {
 
         firstUpgrade.setStyle("-fx-background-image: url('" + AppConstans.currentClickedDeffenceTower.getFirstUpgradeImage() + "');");
         secondUpgrade.setStyle("-fx-background-image: url('" + AppConstans.currentClickedDeffenceTower.getSecondUpgradeImage() + "');");
+        firstUpgrade.setText(String.valueOf(AppConstans.currentClickedDeffenceTower.getFirstUpgradePrice()));
+        secondUpgrade.setText(String.valueOf(AppConstans.currentClickedDeffenceTower.getSecondUpgradePrice()));
 
         towersBoard.setVisible(false);
         towerModifyBoard.setVisible(true);

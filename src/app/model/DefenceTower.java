@@ -60,7 +60,7 @@ public abstract class DefenceTower {
 
     public void sellingTower()
     {
-        AppConstans.gameState.updateMoneyAfterSelling((int)(this.getPriceValue() * 0.8));
+        AppConstans.gameState.updateMoneyAfterSelling((int)(this.getPriceValue() * 0.9));
     }
 
     public boolean getSellTower(){
@@ -150,6 +150,11 @@ public abstract class DefenceTower {
         double dy = getTowerY() + getTowerImg().getFitHeight() / 2.0 - balloonY;
 
         return dx * dx + dy * dy <= (range + range * 0.1) * (range + range * 0.1);
+    }
+
+    public void setDefaultRotation()
+    {
+        towerImg.setRotate(0);
     }
 
     public void clearAfterWave()

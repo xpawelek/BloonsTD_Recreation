@@ -35,7 +35,7 @@ public class Dart {
         this.dartImage.setRotate(0);
     }
 
-    public void throwDart(Balloon balloon, Pane mapPane, int range) {
+    public void throwDart(Balloon balloon, Pane mapPane, DartTower owner, int range) {
         double dx = targetPositionX - towerPositionX;
         double dy = targetPositionY - towerPositionY;
         double distance = Math.hypot(dx, dy);
@@ -52,6 +52,11 @@ public class Dart {
         dartImage.setX(currentX - dartImage.getFitWidth() / 2);
         dartImage.setY(currentY - dartImage.getFitHeight() / 2);
 
+        if(!owner.balloonStillInRange(balloon)) {
+            mapPane.getChildren().remove(dartImage);
+            return;
+        }
+
         Timeline timeline = new Timeline();
         KeyFrame keyFrame = new KeyFrame(Duration.millis(16), event -> {
             currentX += vx * speed;
@@ -63,12 +68,6 @@ public class Dart {
             if (Math.hypot(currentX - targetPositionX, currentY - targetPositionY) < 5) {
                 mapPane.getChildren().remove(dartImage);
                 balloon.updateBalloonLives();
-                timeline.stop();
-            }
-
-            double distanceFromTower = Math.hypot(currentX - towerPositionX, currentY - towerPositionY);
-            if (distanceFromTower > range) {
-                mapPane.getChildren().remove(dartImage);
                 timeline.stop();
             }
         });

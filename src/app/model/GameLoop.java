@@ -317,6 +317,13 @@ public class GameLoop extends AnimationTimer {
         }
     }
 
+    public void setDefaultPositionAfterWave()
+    {
+        for(DefenceTower tower : AppConstans.boughtTowers)
+        {
+            tower.setDefaultRotation();
+        }
+    }
 
     @Override
     public void handle(long now)
@@ -341,6 +348,9 @@ public class GameLoop extends AnimationTimer {
                     incomingWave();
                 }
                 balloonsGoesThroughWave();
+            }
+            else {
+                setDefaultPositionAfterWave();
             }
             if(!AppConstans.gameState.getRoundContinues())
             {
