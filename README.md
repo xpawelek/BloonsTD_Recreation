@@ -14,8 +14,6 @@ The game features interactive UI, animations, tower upgrades, and strategic game
 
 ---
 
----
-
 ## Screenshots
 
 ![image](https://github.com/user-attachments/assets/c955981f-c246-4506-bd44-a934124fb7c0)
